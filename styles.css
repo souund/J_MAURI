@@ -1,6 +1,6 @@
 /* ==========================================================================
-   J MAURI — PRESS KIT 2026 — v9
-   Head sticky, alineación corregida, error 153 resuelto
+   J MAURI — PRESS KIT 2026 — v10
+   Videos simplificados con selector de miniaturas
    ========================================================================== */
 
 :root{
@@ -146,7 +146,7 @@ button{font-family:inherit;cursor:pointer;background:none}
 }
 @media(prefers-reduced-motion:reduce){.section-title::before{animation:none}}
 
-/* ---------- HEAD (AHORA STICKY) ---------- */
+/* ---------- HEAD (sticky) ---------- */
 .head{
   position:sticky;top:0;z-index:1000;
   background:var(--bg-deep);
@@ -274,68 +274,86 @@ button{font-family:inherit;cursor:pointer;background:none}
 }
 @media(prefers-reduced-motion:reduce){.pause-divider::before{animation:none}}
 
-/* ---------- SESIONES ---------- */
-.yt-orbit-wrap{position:relative}
-.yt-track{display:flex;overflow:hidden;border-radius:18px}
-.yt-card{flex:0 0 100%;padding:0 1px}
-.yt-frame{
-  position:relative;padding-top:56.25%;border-radius:16px;overflow:hidden;background:#000;
+/* ---------- SESIONES (nuevo sistema simplificado) ---------- */
+.video-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
-.yt-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.yt-mount{position:absolute;inset:0;width:100%;height:100%}
-.yt-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease,filter .5s ease}
-.yt-frame:hover .yt-thumb{transform:scale(1.05);filter:brightness(.75)}
-.yt-play{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:58px;height:58px;border-radius:50%;background:rgba(6,7,15,.65);
-  border:1px solid rgba(255,255,255,.35);
-  display:flex;align-items:center;justify-content:center;color:var(--white);
-  transition:transform .25s var(--ease),background .25s var(--ease),border-color .25s var(--ease);
-}
-.yt-play svg{width:20px;height:20px;margin-left:3px}
-.yt-frame:hover .yt-play{transform:translate(-50%,-50%) scale(1.12);background:rgba(55,232,255,.18);border-color:var(--cyan)}
-.yt-frame:active .yt-play{transform:translate(-50%,-50%) scale(.94)}
-.yt-frame.loaded .yt-thumb,.yt-frame.loaded .yt-play{display:none}
-.yt-frame.loading .yt-play{opacity:0;pointer-events:none}
-.yt-frame.loading::after{
-  content:'';position:absolute;top:50%;left:50%;width:28px;height:28px;margin:-14px 0 0 -14px;
-  border:2px solid rgba(255,255,255,.25);border-top-color:var(--cyan);border-radius:50%;
-  animation:yt-spin .7s linear infinite;
-}
-@keyframes yt-spin{to{transform:rotate(360deg)}}
 
-.yt-fallback{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-  background:rgba(255,255,255,.03);text-align:center;padding:20px;
+.video-main {
+  position: relative;
+  padding-top: 56.25%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
 }
-.yt-fallback p{font-size:13px;color:var(--muted);margin:0}
-.yt-fallback a{
-  font-size:13px;font-weight:600;color:var(--cyan);border:1px solid var(--cyan-soft);
-  border-radius:999px;padding:9px 18px;transition:background .2s;
-}
-.yt-fallback a:hover{background:rgba(55,232,255,.08)}
 
-.yt-unmute{
-  position:absolute;bottom:12px;right:12px;width:38px;height:38px;border-radius:50%;
-  background:rgba(6,7,15,.75);border:1px solid rgba(255,255,255,.3);
-  display:flex;align-items:center;justify-content:center;color:var(--white);
-  animation:yt-unmute-pulse 1.6s ease-in-out infinite;
+.video-main iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
-.yt-unmute:active{transform:scale(.9)}
-.yt-unmute svg{width:20px;height:20px}
-@keyframes yt-unmute-pulse{0%,100%{box-shadow:0 0 0 0 rgba(55,232,255,.35)}50%{box-shadow:0 0 0 8px rgba(55,232,255,0)}}
-.yt-caption{display:block;font-size:13px;color:var(--muted);margin-top:12px;letter-spacing:.2px}
-.yt-caption em{color:var(--white);font-style:normal;font-weight:600}
-.yt-nav{
-  position:absolute;top:36%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;
-  background:rgba(6,7,15,.75);border:1px solid var(--line);color:var(--white);font-size:19px;
-  display:flex;align-items:center;justify-content:center;
+
+.video-selector {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
 }
-.yt-prev{left:-6px}
-.yt-next{right:-6px}
-.yt-dots{display:flex;justify-content:center;gap:7px;margin-top:18px}
-.yt-dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.22)}
-.yt-dots span.active{background:var(--cyan)}
+
+.video-selector::-webkit-scrollbar {
+  height: 4px;
+}
+
+.video-selector::-webkit-scrollbar-thumb {
+  background: var(--cyan-soft);
+  border-radius: 4px;
+}
+
+.video-thumb {
+  flex: 0 0 120px;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.2s, transform 0.2s;
+  background: var(--bg-panel);
+}
+
+.video-thumb:hover {
+  transform: translateY(-2px);
+}
+
+.video-thumb.active {
+  border-color: var(--cyan);
+}
+
+.video-thumb img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+
+.video-thumb span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  color: white;
+  font-size: 10px;
+  padding: 16px 6px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* ---------- RIDER ---------- */
 .rider-card{padding:0}
@@ -398,6 +416,7 @@ footer#footer p{
    ========================================================================== */
 @media(min-width:560px){
   .gallery-grid{grid-template-columns:repeat(3,1fr);grid-auto-rows:170px}
+  .video-thumb{flex: 0 0 140px;}
 }
 
 @media(min-width:900px){
@@ -407,4 +426,5 @@ footer#footer p{
   .head-socials{padding:0 48px}
   .rider-options{max-width:520px;margin-left:auto;margin-right:auto}
   #navdots{display:flex}
+  .video-thumb{flex: 0 0 160px;}
 }
