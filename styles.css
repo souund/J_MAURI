@@ -20,6 +20,8 @@
 
 *{box-sizing:border-box}
 html{background:var(--bg-deep);scroll-behavior:smooth}
+button{-webkit-appearance:none;appearance:none;border:0;outline:0;background:none}
+button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
 body{
   background:var(--bg-deep);color:var(--white);font-family:var(--font-body);
   margin:0;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;
@@ -109,11 +111,11 @@ button{font-family:inherit;cursor:pointer;background:none}
 }
 
 /* ---------- TABS (underline style) ---------- */
-.tabs{display:flex;gap:26px;border-bottom:1px solid var(--line);margin-bottom:28px;overflow-x:auto;scrollbar-width:none}
+.tabs{display:flex;gap:34px;border-bottom:1px solid var(--line);margin-bottom:30px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{
-  flex:none;color:var(--muted);font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;
-  padding:0 0 14px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;
+  flex:none;color:var(--muted);font-size:15px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  padding:0 0 16px;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;
 }
 .tab.active{color:var(--white);border-color:var(--cyan)}
 
@@ -121,17 +123,26 @@ button{font-family:inherit;cursor:pointer;background:none}
 .tab-panel.active{display:block;animation:panel-in .35s ease both}
 @keyframes panel-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* ---------- KEY FACTS (finas, sin cajas) ---------- */
-.key-facts{
-  display:flex;flex-wrap:wrap;gap:22px 34px;
-  padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line);
+/* ---------- FACT TABLE (Trayectoria / Origen / Géneros) ---------- */
+.fact-table{
+  border:1px solid rgba(255,255,255,.09);border-radius:18px;overflow:hidden;
+  margin-bottom:30px;background:rgba(255,255,255,.025);
 }
-.key-fact{flex:0 1 auto}
-.key-fact-label{display:block;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-.key-fact-value{display:block;font-family:var(--font-display);font-size:19px;letter-spacing:.3px;font-weight:400}
-.key-fact-genres{flex:1 1 100%}
-.genre-pills-mini{display:flex;flex-wrap:wrap;gap:0;font-size:13px;color:var(--white);opacity:.9}
-.genre-pills-mini span:not(:last-child)::after{content:'·';margin:0 8px;color:var(--muted)}
+.fact-row{
+  display:flex;justify-content:space-between;align-items:baseline;gap:18px;
+  padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07);
+}
+.fact-row:last-child{border-bottom:none}
+.fact-row-label{
+  flex:none;font-size:12px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);
+}
+.fact-row-value{
+  font-family:var(--font-display);font-size:22px;letter-spacing:.3px;text-align:right;color:var(--white);
+}
+.fact-row-genres{align-items:flex-start}
+.fact-row-genres .fact-row-value{
+  font-family:var(--font-body);font-weight:600;font-size:14px;text-align:right;max-width:62%;line-height:1.6;color:var(--cyan);
+}
 
 /* ---------- BIO ---------- */
 .bio-copy{font-size:13.5px;line-height:1.75;color:var(--white);opacity:.88;margin:0 0 16px;max-width:62ch}
@@ -238,6 +249,15 @@ button{font-family:inherit;cursor:pointer;background:none}
   background:linear-gradient(120deg,var(--cyan),var(--magenta));color:var(--bg-deep);font-weight:700;font-size:14.5px;letter-spacing:.3px;
 }
 .contact-fallback{display:block;margin-top:16px;font-size:12.5px;color:var(--muted)}
+
+.contact-socials{display:flex;justify-content:center;gap:10px;margin-top:32px}
+.contact-socials a{
+  width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;
+  color:var(--muted);transition:color .2s,border-color .2s,transform .2s,background .2s;
+}
+.contact-socials a:hover{color:var(--cyan);border-color:var(--cyan-soft);background:rgba(55,232,255,.08);transform:translateY(-2px)}
+.contact-socials svg{width:18px;height:18px}
 
 footer#footer{text-align:center;padding:40px var(--edge) 50px}
 footer#footer p{
