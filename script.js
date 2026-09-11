@@ -70,6 +70,28 @@
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
 })();
 
+// ---------- SESIONES — cargar video real solo al dar play ----------
+(function initYtFacades(){
+  document.querySelectorAll('.yt-frame').forEach(frame=>{
+    frame.addEventListener('click', ()=>{
+      if(frame.classList.contains('loaded')) return;
+      const id = frame.dataset.ytId;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&autoplay=1`;
+      iframe.title = 'YouTube video player';
+      iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.allowFullscreen = true;
+      iframe.style.position = 'absolute';
+      iframe.style.inset = '0';
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      frame.appendChild(iframe);
+      frame.classList.add('loaded');
+    });
+  });
+})();
+
 // ---------- SESIONES CAROUSEL ----------
 (function initYtCarousel(){
   const track = document.getElementById('ytTrack');
