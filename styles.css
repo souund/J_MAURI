@@ -96,11 +96,16 @@ button{font-family:inherit;cursor:pointer;background:none}
 }
 .head-socials::-webkit-scrollbar{display:none}
 .head-socials a{
-  flex:none;width:46px;height:46px;border-radius:12px;border:1px solid rgba(255,255,255,.16);
+  flex:none;width:46px;height:46px;border-radius:13px;
+  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   display:flex;align-items:center;justify-content:center;color:var(--muted);
-  transition:color .2s,border-color .2s,transform .2s,background .2s;
+  transition:color .2s,border-color .2s,transform .2s,background .2s,box-shadow .2s;
 }
-.head-socials a:hover{color:var(--cyan);border-color:var(--cyan-soft);background:rgba(55,232,255,.06);transform:translateY(-2px)}
+.head-socials a:hover{
+  color:var(--cyan);border-color:var(--cyan-soft);background:rgba(55,232,255,.09);
+  transform:translateY(-3px);box-shadow:0 8px 20px -8px rgba(55,232,255,.45);
+}
 .head-socials svg{width:21px;height:21px}
 @media(max-width:360px){
   .head-socials{gap:8px}
@@ -121,10 +126,22 @@ button{font-family:inherit;cursor:pointer;background:none}
 .tab-panel.active{display:block;animation:panel-in .35s ease both}
 @keyframes panel-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
+/* ---------- KEY FACTS (finas, sin cajas) ---------- */
+.key-facts{
+  display:flex;flex-wrap:wrap;gap:22px 34px;
+  padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line);
+}
+.key-fact{flex:0 1 auto}
+.key-fact-label{display:block;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.key-fact-value{display:block;font-family:var(--font-display);font-size:19px;letter-spacing:.3px;font-weight:400}
+.key-fact-genres{flex:1 1 100%}
+.genre-pills-mini{display:flex;flex-wrap:wrap;gap:0;font-size:13px;color:var(--white);opacity:.9}
+.genre-pills-mini span:not(:last-child)::after{content:'·';margin:0 8px;color:var(--muted)}
+
 /* ---------- BIO ---------- */
-.bio-copy{font-size:15px;color:var(--white);opacity:.92;margin:0 0 20px;max-width:60ch}
+.bio-copy{font-size:13.5px;line-height:1.75;color:var(--white);opacity:.88;margin:0 0 16px;max-width:62ch}
 .bio-copy:last-child{margin-bottom:0}
-.bio-copy strong{color:var(--cyan);font-weight:600}
+.bio-copy strong{color:var(--cyan);font-weight:600;opacity:1}
 
 /* ---------- GALLERY ---------- */
 .gallery-grid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:150px;grid-auto-flow:dense;gap:6px}
@@ -189,31 +206,35 @@ button{font-family:inherit;cursor:pointer;background:none}
 .yt-dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.22)}
 .yt-dots span.active{background:var(--cyan)}
 
-/* ---------- RIDER ---------- */
-.rider-pills{display:flex;gap:8px;margin-bottom:28px}
-.rider-pill{
-  font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);
-  border:1px solid var(--line);border-radius:999px;padding:7px 14px;
+/* ---------- RIDER — tarjeta premium ---------- */
+.rider-card{
+  border:1px solid rgba(255,255,255,.07);border-radius:22px;
+  background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0));
+  padding:22px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6);
 }
+.rider-photo{position:relative;border-radius:14px;overflow:hidden;margin-bottom:26px;aspect-ratio:16/9}
+.rider-photo img{width:100%;height:100%;object-fit:cover;filter:saturate(.9)}
+.rider-photo-tag{
+  position:absolute;bottom:10px;right:10px;font-size:10px;letter-spacing:.8px;
+  background:rgba(6,7,15,.65);backdrop-filter:blur(4px);color:var(--muted);
+  padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
+}
+
 .rider-options{
-  display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:30px;
-  position:relative;
+  display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:26px;position:relative;
 }
 .rider-options::before{
   content:'';position:absolute;left:50%;top:6%;bottom:6%;width:1px;
   background:linear-gradient(180deg,transparent,var(--line) 20%,var(--line) 80%,transparent);
 }
-.rider-option{padding:8px 20px;text-align:center;transition:transform .3s ease}
-.rider-option:hover{transform:translateY(-4px)}
-.rider-option-label{display:block;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
-.rider-icon{color:var(--muted);margin:0 auto 18px;width:70%;transition:color .3s ease,filter .3s ease}
-.rider-option:hover .rider-icon{color:var(--cyan);filter:drop-shadow(0 0 10px var(--cyan-soft))}
-.rider-list{list-style:none;margin:0;padding:0;font-size:13px}
-.rider-list li{padding:5px 0;font-weight:600}
-.rider-list li span{display:block;font-weight:400;color:var(--muted);font-size:11px;margin-top:1px}
+.rider-option{padding:4px 18px;text-align:center}
+.rider-option-label{display:block;font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.rider-list{list-style:none;margin:0;padding:0;font-size:15px}
+.rider-list li{padding:6px 0;font-weight:600;line-height:1.4}
+.rider-list li span{display:block;font-weight:400;color:var(--muted);font-size:12px;margin-top:1px}
 
-.rider-reqs{font-size:12.5px;color:var(--muted);text-align:center;line-height:1.8;max-width:52ch;margin:0 auto}
-.rider-note{font-size:11px;color:rgba(138,151,180,.7);text-align:center;font-style:italic;margin:14px auto 0;max-width:46ch}
+.rider-reqs{font-size:13px;color:var(--muted);text-align:center;line-height:1.8;max-width:52ch;margin:0 auto}
+.rider-note{font-size:11.5px;color:rgba(138,151,180,.7);text-align:center;font-style:italic;margin:16px auto 0;max-width:46ch}
 
 /* ---------- BOOKING ---------- */
 .section-contact{text-align:center}
