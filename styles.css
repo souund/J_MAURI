@@ -199,6 +199,24 @@ button{font-family:inherit;cursor:pointer;background:none}
 .yt-play svg{width:20px;height:20px;margin-left:3px}
 .yt-frame:hover .yt-play{transform:translate(-50%,-50%) scale(1.12);background:rgba(55,232,255,.18);border-color:var(--cyan)}
 .yt-frame.loaded .yt-thumb,.yt-frame.loaded .yt-play{display:none}
+.yt-frame.loading .yt-play{opacity:0;pointer-events:none}
+.yt-frame.loading::after{
+  content:'';position:absolute;top:50%;left:50%;width:28px;height:28px;margin:-14px 0 0 -14px;
+  border:2px solid rgba(255,255,255,.25);border-top-color:var(--cyan);border-radius:50%;
+  animation:yt-spin .7s linear infinite;
+}
+@keyframes yt-spin{to{transform:rotate(360deg)}}
+
+.yt-fallback{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  background:rgba(255,255,255,.03);text-align:center;padding:20px;
+}
+.yt-fallback p{font-size:13px;color:var(--muted);margin:0}
+.yt-fallback a{
+  font-size:13px;font-weight:600;color:var(--cyan);border:1px solid var(--cyan-soft);
+  border-radius:999px;padding:9px 18px;transition:background .2s;
+}
+.yt-fallback a:hover{background:rgba(55,232,255,.08)}
 .yt-caption{display:block;font-size:13px;color:var(--muted);margin-top:12px;letter-spacing:.2px}
 .yt-caption em{color:var(--white);font-style:normal;font-weight:600}
 .yt-nav{
