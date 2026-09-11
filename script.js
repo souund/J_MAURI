@@ -15,7 +15,10 @@
 
   document.body.style.overflow = 'hidden';
 
-  const MIN_SHOW_MS = 1500;
+  // Duración total en pantalla antes de iniciar el fade-out.
+  // Da tiempo a la entrada (1.1s) + al menos un ciclo completo de pulso (2.2s)
+  // para que la marca "respire" antes de retirarse.
+  const MIN_SHOW_MS = 2800;
   const start = Date.now();
 
   function hide(){
@@ -25,7 +28,7 @@
       intro.classList.add('intro-out');
       document.body.style.overflow = '';
       sessionStorage.setItem('jmauri_intro_seen', '1');
-      setTimeout(()=> intro.remove(), 700);
+      setTimeout(()=> intro.remove(), 750);
     }, wait);
   }
 
@@ -142,14 +145,8 @@
     mount.style.inset = '0';
     frame.appendChild(mount);
 
-    // Fuerza un reflow real antes de instanciar el player: si el frame vive
-    // dentro de una tarjeta de carrusel recién visible (translateX), el navegador
-    // puede no haber asentado el layout todavía y YT.Player nunca reemplaza el
-    // div por el iframe, dejando una pantalla negra sin disparar onError.
     void frame.offsetWidth;
 
-    // Watchdog: si a los 4s el div "mount" no fue reemplazado por un iframe real,
-    // asumimos fallo silencioso de montaje y mostramos el fallback.
     const watchdog = setTimeout(()=>{
       const hasIframe = frame.querySelector('iframe');
       if(!hasIframe){
