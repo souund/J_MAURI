@@ -15,9 +15,6 @@
 
   document.body.style.overflow = 'hidden';
 
-  // Duración total en pantalla antes de iniciar el fade-out.
-  // Da tiempo a la entrada (1.1s) + al menos un ciclo completo de pulso (2.2s)
-  // para que la marca "respire" antes de retirarse.
   const MIN_SHOW_MS = 2800;
   const start = Date.now();
 
@@ -36,7 +33,7 @@
   setTimeout(hide, MIN_SHOW_MS + 200);
 })();
 
-// ---------- REVEAL AL SCROLL — un solo tratamiento, consistente ----------
+// ---------- REVEAL AL SCROLL ----------
 (function initSectionReveal(){
   if(!('IntersectionObserver' in window)) return;
   const sections = document.querySelectorAll('.section');
@@ -76,7 +73,7 @@
   targets.forEach(t => io.observe(t));
 })();
 
-// ---------- INFO TABS (Biografía / Galería / Música) ----------
+// ---------- INFO TABS ----------
 (function initTabs(){
   const tabs = document.querySelectorAll('.tab');
   if(!tabs.length) return;
@@ -124,7 +121,7 @@
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
 })();
 
-// ---------- SESIONES — YouTube IFrame API con fallback robusto ----------
+// ---------- SESIONES — un solo player maestro reutilizable ----------
 (function initYtFacades(){
   const frames = document.querySelectorAll('.yt-frame');
   if(!frames.length) return;
@@ -134,7 +131,8 @@
   const pending = [];
 
   function loadApi(){
-    if(apiLoading || window.YT) { apiLoading = true; return; }
+    if(window.YT && window.YT.Player){ apiReady = true; return; }
+    if(apiLoading) return;
     apiLoading = true;
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -146,80 +144,105 @@
     pending.length = 0;
   };
 
+  let activePlayer = null;
+  let activeFrame = null;
+  let unmuteBtn = null;
+
+  function destroyActive(){
+    if(activePlayer){
+      try{ activePlayer.destroy(); }catch(e){}
+      activePlayer = null;
+    }
+    if(activeFrame) activeFrame.classList.remove('loading','loaded');
+    if(unmuteBtn){ unmuteBtn.remove(); unmuteBtn = null; }
+    document.querySelectorAll('.yt-mount').forEach(m => m.remove());
+  }
+
+  function restoreThumb(frame){
+    const id = frame.dataset.ytId;
+    frame.innerHTML =
+      '<img class="yt-thumb" src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg" alt=""/>' +
+      '<button class="yt-play" aria-label="Reproducir"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>';
+  }
+
   function showFallback(frame, id){
-    frame.innerHTML = `
-      <div class="yt-fallback">
-        <p>Este video no se puede reproducir aquí.</p>
-        <a href="https://youtu.be/${id}" target="_blank" rel="noopener">Ver en YouTube ↗</a>
-      </div>`;
+    frame.classList.remove('loading');
+    frame.classList.add('loaded');
+    frame.innerHTML =
+      '<div class="yt-fallback">' +
+        '<p>Este video no se puede reproducir aquí.</p>' +
+        '<a href="https://youtu.be/' + id + '" target="_blank" rel="noopener">Ver en YouTube ↗</a>' +
+      '</div>';
+  }
+
+  function addUnmuteButton(frame, player){
+    const btn = document.createElement('button');
+    btn.className = 'yt-unmute';
+    btn.setAttribute('aria-label','Activar sonido');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 5V4L8 9H4zm12.5-.9a5 5 0 0 1 0 7.8l-1.2-1.3a3.3 3.3 0 0 0 0-5.2l1.2-1.3zm2.1-2.1a8 8 0 0 1 0 12l-1.2-1.3a6.3 6.3 0 0 0 0-9.4l1.2-1.3z"/></svg>';
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      try{ player.unMute(); player.setVolume(100); }catch(err){}
+      btn.remove();
+    });
+    frame.appendChild(btn);
+    unmuteBtn = btn;
   }
 
   function playVideo(frame){
-    if(frame.classList.contains('loaded') || frame.classList.contains('loading')) return;
+    if(activeFrame === frame && frame.classList.contains('loaded')) return;
+
     const id = frame.dataset.ytId;
+    const prevFrame = activeFrame;
+
+    destroyActive();
+
+    activeFrame = frame;
+
+    // Restauramos la portada de la tarjeta anterior (si existía)
+    if(prevFrame) restoreThumb(prevFrame);
+
     frame.classList.add('loading');
 
     const mount = document.createElement('div');
-    const mountId = 'ytp-' + id.replace(/[^a-zA-Z0-9]/g,'') + '-' + Math.random().toString(36).slice(2,7);
-    mount.id = mountId;
-    mount.style.position = 'absolute';
-    mount.style.inset = '0';
+    mount.className = 'yt-mount';
     frame.appendChild(mount);
 
-    void frame.offsetWidth;
-
     const watchdog = setTimeout(()=>{
-      const hasIframe = frame.querySelector('iframe');
-      if(!hasIframe){
+      if(!frame.querySelector('iframe')){
         showFallback(frame, id);
-        frame.classList.remove('loading');
-        frame.classList.add('loaded');
+        activeFrame = null;
       }
-    }, 4000);
-
-    function addUnmuteButton(player){
-      const btn = document.createElement('button');
-      btn.className = 'yt-unmute';
-      btn.setAttribute('aria-label','Activar sonido');
-      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
-      btn.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        player.unMute();
-        player.setVolume(100);
-        btn.remove();
-      });
-      frame.appendChild(btn);
-    }
+    }, 8000);
 
     function create(){
-      requestAnimationFrame(()=>{
-        try{
-          const player = new YT.Player(mountId, {
-            videoId: id,
-            playerVars: { autoplay: 1, mute: 1, rel: 0, modestbranding: 1, playsinline: 1 },
-            events: {
-              onReady: (e)=>{
-                clearTimeout(watchdog);
-                frame.classList.remove('loading');
-                frame.classList.add('loaded');
-                e.target.playVideo();
-                addUnmuteButton(e.target);
-              },
-              onError: ()=>{
-                clearTimeout(watchdog);
-                showFallback(frame, id);
-                frame.classList.remove('loading');
-                frame.classList.add('loaded');
-              }
+      if(!apiReady || !window.YT || !window.YT.Player){ pending.push(create); loadApi(); return; }
+      try{
+        activePlayer = new YT.Player(mount, {
+          videoId: id,
+          width: '100%',
+          height: '100%',
+          playerVars: { autoplay: 1, mute: 1, rel: 0, modestbranding: 1, playsinline: 1 },
+          events: {
+            onReady: (e)=>{
+              clearTimeout(watchdog);
+              frame.classList.remove('loading');
+              frame.classList.add('loaded');
+              try{ e.target.playVideo(); }catch(err){}
+              addUnmuteButton(frame, e.target);
+            },
+            onError: ()=>{
+              clearTimeout(watchdog);
+              showFallback(frame, id);
+              activeFrame = null;
             }
-          });
-        }catch(err){
-          clearTimeout(watchdog);
-          showFallback(frame, id);
-          frame.classList.remove('loading');
-          frame.classList.add('loaded');
-        }
-      });
+          }
+        });
+      }catch(err){
+        clearTimeout(watchdog);
+        showFallback(frame, id);
+        activeFrame = null;
+      }
     }
 
     if(apiReady && window.YT && window.YT.Player) create();
@@ -251,7 +274,7 @@
   const dots = dotsWrap.querySelectorAll('span');
 
   function update(){
-    track.style.transform = `translateX(-${index*100}%)`;
+    track.style.transform = 'translateX(-' + (index*100) + '%)';
     dots.forEach((d,i)=> d.classList.toggle('active', i===index));
   }
   function goTo(i){ index = i; update(); }
