@@ -1,9 +1,7 @@
 /* ==========================================================================
-   J MAURI — PRESS KIT 2026 — script v2
-   - Un solo player maestro reutilizable (evita colapso de YouTube)
-   - Watchdog gestionado globalmente (evita fallbacks huérfanos)
-   - El carrusel resetea el player al cambiar de slide
-   - Referrer/origen correcto para GitHub Pages (error 153 resuelto)
+   J MAURI — PRESS KIT 2026 — script v3
+   - Sistema de videos simplificado (un solo iframe, cambio de src)
+   - Intro, tabs, lightbox, navdots y reveal intactos
    ========================================================================== */
 
 // ---------- INTRO / SPLASH ----------
@@ -125,217 +123,53 @@
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
 })();
 
-// ---------- SESIONES — un solo player maestro reutilizable ----------
-(function initYtFacades(){
-  const frames = document.querySelectorAll('.yt-frame');
-  if(!frames.length) return;
+// ---------- SESIONES — Selector de videos simple ----------
+(function initVideoSelector(){
+  const videoFrame = document.getElementById('videoFrame');
+  const videoSelector = document.getElementById('videoSelector');
+  if(!videoFrame || !videoSelector) return;
 
-  // --- Carga del API (una sola vez) ---
-  let apiReady = false;
-  let apiLoading = false;
-  const pending = [];
+  const videos = [
+    { id: "6LIKP_KYmgo", title: "Mauryseo Vol. 2" },
+    { id: "upoUhtUHiQs", title: "Depto Session" },
+    { id: "3eLYEonmF5A", title: "Déjate Llevar" },
+    { id: "oZaOCgXWi0s", title: "Casa del Lago" },
+    { id: "2HmVZI4MfkM", title: "Mundo Diferente" },
+    { id: "0_9jwWLh-nw", title: "Nena Exclusive" },
+    { id: "o-dtx72NlOY", title: "Mauryseo Vol. 1" }
+  ];
 
-  function loadApi(){
-    if(window.YT && window.YT.Player){ apiReady = true; return; }
-    if(apiLoading) return;
-    apiLoading = true;
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-  }
-  window.onYouTubeIframeAPIReady = function(){
-    apiReady = true;
-    pending.forEach(fn => fn());
-    pending.length = 0;
-  };
+  let currentIndex = 0;
 
-  // --- Estado del player maestro ---
-  let activePlayer = null;
-  let activeFrame = null;
-  let unmuteBtn = null;
-  let watchdog = null;
+  function loadVideo(index){
+    if(index === currentIndex) return;
+    const video = videos[index];
+    const embedUrl = 'https://www.youtube-nocookie.com/embed/' + video.id + '?autoplay=1&rel=0&modestbranding=1';
+    videoFrame.src = embedUrl;
+    currentIndex = index;
 
-  // --- Detección de origen para GitHub Pages (referrer del error 153) ---
-  const PAGE_ORIGIN = (function(){
-    try{
-      return window.location.origin && window.location.origin !== 'null'
-        ? window.location.origin
-        : 'https://souund.github.io';
-    }catch(e){ return 'https://souund.github.io'; }
-  })();
-
-  function clearWatchdog(){
-    if(watchdog){ clearTimeout(watchdog); watchdog = null; }
-  }
-
-  function destroyActive(){
-    clearWatchdog();
-    if(activePlayer){
-      try{ activePlayer.destroy(); }catch(e){}
-      activePlayer = null;
-    }
-    if(activeFrame) activeFrame.classList.remove('loading','loaded');
-    if(unmuteBtn){ unmuteBtn.remove(); unmuteBtn = null; }
-    document.querySelectorAll('.yt-mount').forEach(m => m.remove());
-    activeFrame = null;
-  }
-
-  function restoreThumb(frame){
-    const id = frame.dataset.ytId;
-    frame.innerHTML =
-      '<img class="yt-thumb" src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg" alt=""/>' +
-      '<button class="yt-play" aria-label="Reproducir"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>';
-  }
-
-  function showFallback(frame, id, code){
-    clearWatchdog();
-    frame.classList.remove('loading');
-    frame.classList.add('loaded');
-    frame.innerHTML =
-      '<div class="yt-fallback">' +
-        '<p>Este video no se puede reproducir aquí.</p>' +
-        '<a href="https://youtu.be/' + id + '" target="_blank" rel="noopener">Ver en YouTube ↗</a>' +
-      '</div>';
-    if(code) console.warn('[YT] Fallback video:', id, '— código:', code);
-    activeFrame = null;
-  }
-
-  function addUnmuteButton(frame, player){
-    const btn = document.createElement('button');
-    btn.className = 'yt-unmute';
-    btn.setAttribute('aria-label','Activar sonido');
-    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 5V4L8 9H4zm12.5-.9a5 5 0 0 1 0 7.8l-1.2-1.3a3.3 3.3 0 0 0 0-5.2l1.2-1.3zm2.1-2.1a8 8 0 0 1 0 12l-1.2-1.3a6.3 6.3 0 0 0 0-9.4l1.2-1.3z"/></svg>';
-    btn.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      try{ player.unMute(); player.setVolume(100); }catch(err){}
-      btn.remove();
+    const thumbs = videoSelector.querySelectorAll('.video-thumb');
+    thumbs.forEach((thumb, i)=>{
+      thumb.classList.toggle('active', i === index);
     });
-    frame.appendChild(btn);
-    unmuteBtn = btn;
   }
 
-  function playVideo(frame){
-    if(activeFrame === frame && frame.classList.contains('loaded')) return;
+  videos.forEach((video, index)=>{
+    const thumb = document.createElement('button');
+    thumb.className = 'video-thumb' + (index === 0 ? ' active' : '');
+    thumb.setAttribute('aria-label', 'Reproducir ' + video.title);
 
-    const id = frame.dataset.ytId;
-    const prevFrame = activeFrame;
+    const thumbImg = document.createElement('img');
+    thumbImg.src = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
+    thumbImg.alt = video.title;
+    thumbImg.loading = 'lazy';
 
-    destroyActive();
+    const thumbTitle = document.createElement('span');
+    thumbTitle.textContent = video.title;
 
-    activeFrame = frame;
-    if(prevFrame && prevFrame !== frame) restoreThumb(prevFrame);
-
-    frame.classList.add('loading');
-
-    const mount = document.createElement('div');
-    mount.className = 'yt-mount';
-    frame.appendChild(mount);
-
-    watchdog = setTimeout(()=>{
-      if(activeFrame === frame && !frame.querySelector('iframe')){
-        showFallback(frame, id, 'timeout');
-      }
-    }, 8000);
-
-    function create(){
-      if(!apiReady || !window.YT || !window.YT.Player){ pending.push(create); loadApi(); return; }
-      try{
-        activePlayer = new YT.Player(mount, {
-          videoId: id,
-          width: '100%',
-          height: '100%',
-          host: 'https://www.youtube-nocookie.com',
-          playerVars: {
-            autoplay: 1,
-            mute: 1,
-            rel: 0,
-            modestbranding: 1,
-            playsinline: 1,
-            origin: PAGE_ORIGIN
-          },
-          events: {
-            onReady: (e)=>{
-              clearWatchdog();
-              if(activeFrame !== frame) return; // el usuario cambió de video antes de que cargara
-              frame.classList.remove('loading');
-              frame.classList.add('loaded');
-              try{ e.target.playVideo(); }catch(err){}
-              addUnmuteButton(frame, e.target);
-            },
-            onError: (ev)=>{
-              // 2 = ID inválido, 5 = HTML5, 100 = no existe, 101/150 = embedding no permitido
-              showFallback(frame, id, ev && ev.data);
-            }
-          }
-        });
-      }catch(err){
-        showFallback(frame, id, 'exception');
-      }
-    }
-
-    if(apiReady && window.YT && window.YT.Player) create();
-    else { pending.push(create); loadApi(); }
-  }
-
-  frames.forEach(frame=>{
-    frame.addEventListener('click', ()=> playVideo(frame));
+    thumb.appendChild(thumbImg);
+    thumb.appendChild(thumbTitle);
+    thumb.addEventListener('click', ()=> loadVideo(index));
+    videoSelector.appendChild(thumb);
   });
-
-  // --- Puente con el carrusel: resetear el player al cambiar de slide ---
-  window.addEventListener('jmauri:yt-reset', ()=>{
-    if(activeFrame){
-      const f = activeFrame;
-      destroyActive();
-      restoreThumb(f);
-    }
-  });
-})();
-
-// ---------- SESIONES CAROUSEL ----------
-(function initYtCarousel(){
-  const track = document.getElementById('ytTrack');
-  const prevBtn = document.getElementById('ytPrev');
-  const nextBtn = document.getElementById('ytNext');
-  const dotsWrap = document.getElementById('ytDots');
-  if(!track) return;
-
-  const cards = track.querySelectorAll('.yt-card');
-  let index = 0;
-
-  cards.forEach((_, i)=>{
-    const dot = document.createElement('span');
-    if(i===0) dot.classList.add('active');
-    dot.addEventListener('click', ()=> goTo(i));
-    dotsWrap.appendChild(dot);
-  });
-  const dots = dotsWrap.querySelectorAll('span');
-
-  function update(){
-    track.style.transform = 'translateX(-' + (index*100) + '%)';
-    dots.forEach((d,i)=> d.classList.toggle('active', i===index));
-  }
-  function goTo(i){
-    if(i === index){ update(); return; }
-    // Avisamos al módulo de YouTube que resetee el player
-    window.dispatchEvent(new CustomEvent('jmauri:yt-reset'));
-    index = i;
-    update();
-  }
-
-  prevBtn.addEventListener('click', ()=>{
-    const next = (index - 1 + cards.length) % cards.length;
-    goTo(next);
-  });
-  nextBtn.addEventListener('click', ()=>{
-    const next = (index + 1) % cards.length;
-    goTo(next);
-  });
-
-  let startX = 0;
-  track.addEventListener('touchstart', e => startX = e.touches[0].clientX, {passive:true});
-  track.addEventListener('touchend', e => {
-    const diff = e.changedTouches[0].clientX - startX;
-    if(diff > 50) prevBtn.click();
-    else if(diff < -50) nextBtn.click();
-  }, {passive:true});
 })();
