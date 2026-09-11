@@ -70,25 +70,70 @@
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
 })();
 
-// ---------- SESIONES — cargar video real solo al dar play ----------
+// ---------- SESIONES — YouTube IFrame API con fallback si el embed está bloqueado ----------
 (function initYtFacades(){
-  document.querySelectorAll('.yt-frame').forEach(frame=>{
-    frame.addEventListener('click', ()=>{
-      if(frame.classList.contains('loaded')) return;
-      const id = frame.dataset.ytId;
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1&autoplay=1`;
-      iframe.title = 'YouTube video player';
-      iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      iframe.allowFullscreen = true;
-      iframe.style.position = 'absolute';
-      iframe.style.inset = '0';
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.border = '0';
-      frame.appendChild(iframe);
-      frame.classList.add('loaded');
-    });
+  const frames = document.querySelectorAll('.yt-frame');
+  if(!frames.length) return;
+
+  let apiReady = false;
+  let apiLoading = false;
+  const pending = [];
+
+  function loadApi(){
+    if(apiLoading) return;
+    apiLoading = true;
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+  window.onYouTubeIframeAPIReady = function(){
+    apiReady = true;
+    pending.forEach(fn => fn());
+    pending.length = 0;
+  };
+
+  function showFallback(frame, id){
+    frame.innerHTML = `
+      <div class="yt-fallback">
+        <p>Este video no se puede reproducir aquí.</p>
+        <a href="https://youtu.be/${id}" target="_blank" rel="noopener">Ver en YouTube ↗</a>
+      </div>`;
+  }
+
+  function playVideo(frame){
+    if(frame.classList.contains('loaded')) return;
+    const id = frame.dataset.ytId;
+    frame.classList.add('loading');
+
+    const mount = document.createElement('div');
+    const mountId = 'ytp-' + id.replace(/[^a-zA-Z0-9]/g,'') + '-' + Math.random().toString(36).slice(2,7);
+    mount.id = mountId;
+    mount.style.position = 'absolute';
+    mount.style.inset = '0';
+    frame.appendChild(mount);
+
+    function create(){
+      new YT.Player(mountId, {
+        videoId: id,
+        playerVars: { autoplay: 1, rel: 0, modestbranding: 1, playsinline: 1 },
+        events: {
+          onReady: ()=>{ frame.classList.remove('loading'); frame.classList.add('loaded'); },
+          onError: (e)=>{
+            // 2: id inválido, 5: error HTML5, 100: no encontrado, 101/150: embed no permitido por el dueño
+            showFallback(frame, id);
+            frame.classList.remove('loading');
+            frame.classList.add('loaded');
+          }
+        }
+      });
+    }
+
+    if(apiReady) create();
+    else { pending.push(create); loadApi(); }
+  }
+
+  frames.forEach(frame=>{
+    frame.addEventListener('click', ()=> playVideo(frame));
   });
 })();
 
