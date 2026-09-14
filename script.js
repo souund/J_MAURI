@@ -130,13 +130,14 @@
   if(!videoFrame || !videoSelector) return;
 
   const videos = [
+    { id: "wimV3hKELhw", title: "Mauryseo Vol. 3" },
     { id: "6LIKP_KYmgo", title: "Mauryseo Vol. 2" },
+    { id: "o-dtx72NlOY", title: "Mauryseo Vol. 1" },
+    { id: "2HmVZI4MfkM", title: "Mundo Diferente" },
     { id: "upoUhtUHiQs", title: "Depto Session" },
     { id: "3eLYEonmF5A", title: "Déjate Llevar" },
-    { id: "oZaOCgXWi0s", title: "Casa del Lago" },
-    { id: "2HmVZI4MfkM", title: "Mundo Diferente" },
-    { id: "0_9jwWLh-nw", title: "Nena Exclusive" },
-    { id: "o-dtx72NlOY", title: "Mauryseo Vol. 1" }
+    { id: "oZaOCgXWi0s", title: "Casa del Lago" }
+    
   ];
 
   let currentIndex = 0;
