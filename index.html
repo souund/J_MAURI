@@ -59,17 +59,23 @@
   </div>
 </div>
 
-<!-- Mini barra: aparece al salir del head -->
-<div id="minibar" aria-hidden="true">
-  <a href="#head" class="minibar-name">J MAURI</a>
-  <a href="#contacto" class="minibar-cta">Booking</a>
+<!-- ============ BARRA FLOTANTE: logo + Booking ============ -->
+<div id="minibar">
+  <a href="#head" class="logo-mark minibar-logo" style="--w:96px" aria-label="J Mauri, volver arriba">
+    <img src="assets/press/dj-mauri-logo.webp" alt="" decoding="async"/>
+    <span class="logo-text">J MAURI</span>
+  </a>
+  <a href="https://wa.me/525567777542?text=Hola%20J%20Mauri%2C%20quiero%20hablar%20de%20un%20booking" target="_blank" rel="noopener" id="wa" class="minibar-cta">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M9.2 8.3c-.3.6-.4 1.4 0 2.3.7 1.7 2.1 3 3.8 3.8.8.3 1.6.3 2.2-.1l.6-.7-1.8-1.1-.9.7c-1-.4-1.9-1.3-2.3-2.3l.7-.9-1-1.8z"/></svg>
+    <span>Booking</span>
+  </a>
+  <i class="minibar-progress" id="minibarProgress" aria-hidden="true"></i>
 </div>
 
 <nav id="navdots" aria-label="Navegación de secciones">
   <a href="#head" class="navdot active" data-label="Inicio"></a>
-  <a href="#info" class="navdot" data-label="Info"></a>
+  <a href="#info" class="navdot" data-label="Perfil"></a>
   <a href="#sesiones" class="navdot" data-label="Sesiones"></a>
-  <a href="#contacto" class="navdot" data-label="Booking"></a>
   <a href="#rider" class="navdot" data-label="Rider"></a>
 </nav>
 
@@ -82,11 +88,11 @@
 
   <div class="hero-top">
     <span>EPK 2026</span>
-    <span>CDMX · MX</span>
+    <span class="hero-clock"><i class="live-dot"></i><b id="clock">CDMX · MX</b></span>
   </div>
 
   <div class="hero-content">
-    <h1 class="hero-name"><span class="hn-j">J</span> <span class="hn-m">Mauri</span></h1>
+    <h1 class="hero-name chrome"><span class="hn-j">J</span> <span class="hn-m">Mauri</span></h1>
 
     <div class="hero-socials">
       <a href="https://www.instagram.com/j_mauri_" target="_blank" rel="noopener" aria-label="Instagram">
@@ -108,8 +114,52 @@
   </div>
 </header>
 
-<!-- ============ INFO — tabs ============ -->
+<!-- ============ ESCENARIOS & COLABORACIONES (cinta que no se detiene) ============ -->
+<div class="ticker" role="group" aria-label="Escenarios y colaboraciones">
+  <div class="ticker-track">
+    <div class="ticker-group">
+      <span>EDC México</span><i class="star"></i>
+      <span>Coca-Cola Flow Fest</span><i class="star"></i>
+      <span>Festival Internacional Cervantino</span><i class="star"></i>
+      <span>Auditorio BB</span><i class="star"></i>
+      <span>Festival Dale Mixx</span><i class="star"></i>
+      <span>Champion</span><i class="star"></i>
+      <span>Snow Tha Product</span><i class="star"></i>
+      <span>Milo Mae</span><i class="star"></i>
+      <span>Mad Fuentes</span><i class="star"></i>
+      <span>DJ Playero</span><i class="star"></i>
+      <span>Kevin Roldán</span><i class="star"></i>
+      <span>Bellakath</span><i class="star"></i>
+      <span>Standly</span><i class="star"></i>
+      <span>El Bogueto</span><i class="star"></i>
+      <span>Carlos Cortés</span><i class="star"></i>
+      <span>Perreo de Antes</span><i class="star"></i>
+    </div>
+    <div class="ticker-group" aria-hidden="true">
+      <span>EDC México</span><i class="star"></i>
+      <span>Coca-Cola Flow Fest</span><i class="star"></i>
+      <span>Festival Internacional Cervantino</span><i class="star"></i>
+      <span>Auditorio BB</span><i class="star"></i>
+      <span>Festival Dale Mixx</span><i class="star"></i>
+      <span>Champion</span><i class="star"></i>
+      <span>Snow Tha Product</span><i class="star"></i>
+      <span>Milo Mae</span><i class="star"></i>
+      <span>Mad Fuentes</span><i class="star"></i>
+      <span>DJ Playero</span><i class="star"></i>
+      <span>Kevin Roldán</span><i class="star"></i>
+      <span>Bellakath</span><i class="star"></i>
+      <span>Standly</span><i class="star"></i>
+      <span>El Bogueto</span><i class="star"></i>
+      <span>Carlos Cortés</span><i class="star"></i>
+      <span>Perreo de Antes</span><i class="star"></i>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 01 PERFIL ============ -->
 <section id="info" class="section">
+  <div class="sec-head"><span class="sec-num">01</span><h2 class="section-title chrome">Perfil</h2><i class="blade"></i></div>
+
   <div class="tabs" role="tablist">
     <button class="tab active" role="tab" aria-selected="true" data-tab="bio">Biografía</button>
     <button class="tab" role="tab" aria-selected="false" data-tab="galeria">Galería</button>
@@ -123,7 +173,7 @@
       <div class="fact-row fact-row-genres"><span class="fact-row-label">Géneros</span><span class="fact-row-value">Reggaetón, Perreo, Urban, Latin, Open Format</span></div>
     </div>
 
-    <p class="bio-kicker">DJ • Productor • Artista</p>
+    <p class="bio-kicker"><i class="star"></i>DJ • Productor • Artista</p>
     <p class="bio-copy">
       Con más de <strong>8 años de trayectoria</strong>, J Mauri ha llevado su sonido a muchos de los clubes y escenarios más destacados de la Ciudad de México y toda la República Mexicana, de norte a sur, expandiendo su presencia también a nivel internacional.
     </p>
@@ -165,16 +215,14 @@
 
   <div class="tab-panel" id="panel-musica">
     <div class="spotify-console">
-      <iframe data-testid="embed-iframe" style="border-radius:14px" src="https://open.spotify.com/embed/artist/5e2QMokByimjpy5prPACGj?utm_source=generator&theme=0" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      <iframe data-testid="embed-iframe" src="https://open.spotify.com/embed/artist/5e2QMokByimjpy5prPACGj?utm_source=generator&theme=0" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>
   </div>
 </section>
 
-<div class="divider" aria-hidden="true"><span></span></div>
-
-<!-- ============ SESIONES ============ -->
+<!-- ============ 02 SESIONES ============ -->
 <section id="sesiones" class="section section-wide">
-  <h2 class="section-title">Sesiones</h2>
+  <div class="sec-head"><span class="sec-num">02</span><h2 class="section-title chrome">Sesiones</h2><i class="blade"></i></div>
 
   <div class="video-showcase">
     <div class="video-main">
@@ -193,26 +241,9 @@
   </div>
 </section>
 
-<!-- ============ BOOKING ============ -->
-<section id="contacto" class="section">
-  <h2 class="section-title">Booking &amp; Contacto</h2>
-  <div class="contact-grid">
-    <a href="https://wa.me/525567777542?text=Hola%20J%20Mauri%2C%20quiero%20hablar%20de%20un%20booking" target="_blank" rel="noopener" id="wa" class="contact-card contact-card-main">
-      <svg class="cc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M9.2 8.3c-.3.6-.4 1.4 0 2.3.7 1.7 2.1 3 3.8 3.8.8.3 1.6.3 2.2-.1l.6-.7-1.8-1.1-.9.7c-1-.4-1.9-1.3-2.3-2.3l.7-.9-1-1.8z"/></svg>
-      <span class="cc-text"><b>Booking</b><small>WhatsApp</small></span>
-      <svg class="cc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
-    </a>
-    <a href="mailto:jmaurimusic@gmail.com" id="mail-cta" class="contact-card">
-      <svg class="cc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.8 7.2l8.2 6 8.2-6"/></svg>
-      <span class="cc-text"><b>Contacto</b><small>jmaurimusic@gmail.com</small></span>
-      <svg class="cc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
-    </a>
-  </div>
-</section>
-
-<!-- ============ RIDER TÉCNICO ============ -->
+<!-- ============ 03 RIDER TÉCNICO ============ -->
 <section id="rider" class="section">
-  <h2 class="section-title">Rider técnico</h2>
+  <div class="sec-head"><span class="sec-num">03</span><h2 class="section-title chrome">Rider técnico</h2><i class="blade"></i></div>
 
   <div class="rider-card">
     <div class="rider-photo">
@@ -240,7 +271,22 @@
   </div>
 </section>
 
-<footer id="footer"><p>DJ MAURI - EPK 2026 x TURBOBOYZ®</p></footer>
+<!-- ============ PIE ============ -->
+<footer id="footer">
+  <div class="divider" aria-hidden="true"><i class="blade blade-l"></i><i class="star"></i><i class="blade blade-r"></i></div>
+
+  <div class="logo-mark footer-logo" style="--w:min(74vw,340px)">
+    <img src="assets/press/dj-mauri-logo.webp" alt="J Mauri" loading="lazy" decoding="async"/>
+    <span class="logo-text">J MAURI</span>
+  </div>
+
+  <a href="mailto:jmaurimusic@gmail.com" class="footer-contact">
+    <b>Contacto</b>
+    <small>jmaurimusic@gmail.com</small>
+  </a>
+
+  <p>DJ MAURI - EPK 2026 x TURBOBOYZ®</p>
+</footer>
 
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar">×</button>
