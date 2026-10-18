@@ -1,38 +1,188 @@
 /* ==========================================================================
-   J MAURI — PRESS KIT 2026 — script v3
-   - Sistema de videos simplificado (un solo iframe, cambio de src)
-   - Intro, tabs, lightbox, navdots y reveal intactos
+   J MAURI — PRESS KIT 2026 — script v4
+   - Telonero sincronizado con la carga real (fuentes + logo + portada)
+   - Hero con EQ pausable, parallax ligero y mini barra
+   - Waveform divider, "now playing", tabs, lightbox, navdots
    ========================================================================== */
 
-// ---------- INTRO / SPLASH ----------
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- TELONERO ----------
 (function initIntro(){
+  const body = document.body;
   const intro = document.getElementById('intro');
-  if(!intro) return;
+  const ready = () => body.classList.add('is-ready');
 
-  const seen = sessionStorage.getItem('jmauri_intro_seen');
-  if(seen){
-    intro.remove();
-    return;
+  if(!intro){ ready(); return; }
+
+  let seen = false;
+  try { seen = sessionStorage.getItem('jmauri_intro_seen') === '1'; } catch(e){}
+  if(seen){ intro.remove(); ready(); return; }
+
+  body.classList.add('intro-lock');
+
+  const bar   = document.getElementById('introBar');
+  const label = document.getElementById('introLabel');
+  const bpm   = document.getElementById('introBpm');
+  const logo  = document.getElementById('introLogo');
+
+  const MIN_MS  = REDUCED ? 900 : 3600;   // duración mínima del telonero
+  const HARD_MS = 8000;                   // seguro: nunca se queda trabado
+  const start   = performance.now();
+
+  // Recursos reales que esperamos
+  let done = 0;
+  const TOTAL = 3;
+  const tick = () => { done = Math.min(TOTAL, done + 1); };
+
+  // 1) logo del telonero
+  if(logo.complete){
+    if(logo.naturalWidth === 0) intro.classList.add('logo-failed');
+    tick();
+  } else {
+    logo.addEventListener('load', tick, { once:true });
+    logo.addEventListener('error', ()=>{ intro.classList.add('logo-failed'); tick(); }, { once:true });
+  }
+  // 2) fuentes
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(tick, tick);
+    setTimeout(()=>{ if(done < TOTAL) tick(); }, 2500); // si las fuentes tardan, no bloquear
+  } else { tick(); }
+  // 3) portada del hero
+  const cover = new Image();
+  cover.onload = cover.onerror = tick;
+  cover.src = 'assets/press/head-cover.webp';
+
+  let p = 0;            // progreso mostrado (0..1)
+  let forced = false;   // el usuario tocó para saltar
+  let dropped = false;
+
+  function frame(now){
+    if(dropped) return;
+    const elapsed = now - start;
+    const real = done / TOTAL;
+    const timeFrac = Math.min(1, elapsed / MIN_MS);
+    const target = forced ? 1 : Math.min(real, timeFrac);
+
+    p += (target - p) * (forced ? 0.25 : 0.1);
+    if(target === 1 && p > 0.995) p = 1;
+
+    bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    bpm.textContent = String(Math.round(p * 128)).padStart(3, '0') + ' BPM';
+    label.textContent =
+      p >= 1   ? 'DROP' :
+      p > 0.7  ? 'CUE READY' :
+      p > 0.3  ? 'SYNCING BEATS' : 'LOADING SET';
+
+    if(p >= 1 || elapsed > HARD_MS){ drop(); return; }
+    requestAnimationFrame(frame);
   }
 
-  document.body.style.overflow = 'hidden';
+  function drop(){
+    if(dropped) return;
+    dropped = true;
+    bar.style.transform = 'scaleX(1)';
+    bpm.textContent = '128 BPM';
+    label.textContent = 'DROP';
+    intro.classList.add('is-drop');
 
-  const MIN_SHOW_MS = 2800;
-  const start = Date.now();
-
-  function hide(){
-    const elapsed = Date.now() - start;
-    const wait = Math.max(0, MIN_SHOW_MS - elapsed);
     setTimeout(()=>{
-      intro.classList.add('intro-out');
-      document.body.style.overflow = '';
-      sessionStorage.setItem('jmauri_intro_seen', '1');
-      setTimeout(()=> intro.remove(), 750);
-    }, wait);
+      intro.classList.add('is-open');     // persianas
+      body.classList.remove('intro-lock');
+      ready();
+      try { sessionStorage.setItem('jmauri_intro_seen', '1'); } catch(e){}
+      setTimeout(()=> intro.remove(), 1200);
+    }, REDUCED ? 100 : 750);
   }
 
-  intro.addEventListener('click', hide);
-  setTimeout(hide, MIN_SHOW_MS + 200);
+  // Tocar para saltar (después de que el logo ya apareció)
+  intro.addEventListener('click', ()=>{
+    if(performance.now() - start > 900) forced = true;
+  });
+
+  requestAnimationFrame(frame);
+})();
+
+// ---------- HERO: ECUALIZADOR ----------
+(function initHeroEq(){
+  const eq = document.getElementById('heroEq');
+  if(!eq) return;
+  const hero = document.getElementById('head');
+  const BARS = window.innerWidth < 560 ? 32 : 64;
+
+  // Pseudo-aleatorio determinista: mismo patrón en cada visita
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+  const frag = document.createDocumentFragment();
+  for(let i = 0; i < BARS; i++){
+    const b = document.createElement('i');
+    b.className = 'eq-bar';
+    // más energía hacia el centro, como un espectro real
+    const centre = 1 - Math.abs(i / (BARS - 1) - 0.5) * 1.1;
+    b.style.setProperty('--min', (0.08 + rnd() * 0.12).toFixed(2));
+    b.style.setProperty('--max', (0.25 + rnd() * 0.75 * centre).toFixed(2));
+    b.style.setProperty('--dur', (0.55 + rnd() * 0.9).toFixed(2) + 's');
+    b.style.setProperty('--delay', (-rnd() * 2).toFixed(2) + 's');
+    frag.appendChild(b);
+  }
+  eq.appendChild(frag);
+
+  // Pausar animaciones cuando el hero no se ve
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(([e])=>{
+      hero.classList.toggle('is-paused', !e.isIntersecting);
+    }, { threshold: 0 }).observe(hero);
+  }
+})();
+
+// ---------- HERO: PARALLAX + MINI BARRA ----------
+(function initScrollFx(){
+  const hero = document.getElementById('head');
+  const img = hero && hero.querySelector('.hero-bg img');
+  if(!hero) return;
+
+  let ticking = false;
+  function update(){
+    const y = window.scrollY;
+    const h = hero.offsetHeight;
+    document.body.classList.toggle('past-hero', y > h - 140);
+    if(img && !REDUCED && y < h){
+      img.style.transform = 'translate3d(0,' + (y * 0.22).toFixed(1) + 'px,0)';
+    }
+    ticking = false;
+  }
+  window.addEventListener('scroll', ()=>{
+    if(!ticking){ ticking = true; requestAnimationFrame(update); }
+  }, { passive:true });
+  update();
+
+  // "Escuchar" abre directamente la pestaña Música
+  const listen = document.getElementById('heroListen');
+  if(listen){
+    listen.addEventListener('click', ()=>{
+      const t = document.querySelector('.tab[data-tab="musica"]');
+      if(t) t.click();
+    });
+  }
+})();
+
+// ---------- WAVEFORM DIVIDER ----------
+(function initWave(){
+  const wave = document.getElementById('wave');
+  if(!wave) return;
+  const N = window.innerWidth < 560 ? 56 : 90;
+  const frag = document.createDocumentFragment();
+  for(let i = 0; i < N; i++){
+    const t = i / N;
+    // forma tipo pista: intro suave, build, drop y salida
+    const env = 0.25 + 0.75 * Math.pow(Math.sin(Math.PI * t), 0.6);
+    const v = Math.abs(Math.sin(i * 1.7) * 0.55 + Math.sin(i * 0.43 + 1) * 0.45);
+    const bar = document.createElement('i');
+    bar.style.setProperty('--h', Math.max(6, Math.round((8 + v * 46) * env)) + 'px');
+    frag.appendChild(bar);
+  }
+  wave.appendChild(frag);
 })();
 
 // ---------- REVEAL AL SCROLL ----------
@@ -56,26 +206,24 @@
   });
 })();
 
-// ---------- NAV DOTS ACTIVE STATE ----------
+// ---------- NAV DOTS ----------
 (function initNavDots(){
-  const targets = document.querySelectorAll('.section, .head');
+  const targets = document.querySelectorAll('.section, .hero');
   const dots = document.querySelectorAll('.navdot');
-  if(!targets.length || !dots.length) return;
+  if(!targets.length || !dots.length || !('IntersectionObserver' in window)) return;
 
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       if(entry.isIntersecting){
         const id = entry.target.id;
-        dots.forEach(d=>{
-          d.classList.toggle('active', d.getAttribute('href') === '#'+id);
-        });
+        dots.forEach(d => d.classList.toggle('active', d.getAttribute('href') === '#' + id));
       }
     });
   }, { threshold: 0.4 });
   targets.forEach(t => io.observe(t));
 })();
 
-// ---------- INFO TABS ----------
+// ---------- TABS ----------
 (function initTabs(){
   const tabs = document.querySelectorAll('.tab');
   if(!tabs.length) return;
@@ -92,7 +240,7 @@
   });
 })();
 
-// ---------- GALLERY LIGHTBOX ----------
+// ---------- LIGHTBOX ----------
 (function initLightbox(){
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
@@ -113,9 +261,8 @@
   document.addEventListener('click', (e)=>{
     const item = e.target.closest('.gallery-item');
     if(item){
-      const full = item.dataset.full;
       const alt = item.querySelector('img')?.alt || '';
-      open(full, alt);
+      open(item.dataset.full, alt);
     }
   });
   closeBtn.addEventListener('click', close);
@@ -123,10 +270,11 @@
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
 })();
 
-// ---------- SESIONES — Selector de videos simple ----------
+// ---------- SESIONES: selector + NOW PLAYING ----------
 (function initVideoSelector(){
   const videoFrame = document.getElementById('videoFrame');
   const videoSelector = document.getElementById('videoSelector');
+  const nowTitle = document.getElementById('nowTitle');
   if(!videoFrame || !videoSelector) return;
 
   const videos = [
@@ -137,7 +285,6 @@
     { id: "upoUhtUHiQs", title: "Depto Session" },
     { id: "3eLYEonmF5A", title: "Déjate Llevar" },
     { id: "oZaOCgXWi0s", title: "Casa del Lago" }
-    
   ];
 
   let currentIndex = 0;
@@ -145,12 +292,11 @@
   function loadVideo(index){
     if(index === currentIndex) return;
     const video = videos[index];
-    const embedUrl = 'https://www.youtube-nocookie.com/embed/' + video.id + '?autoplay=1&rel=0&modestbranding=1';
-    videoFrame.src = embedUrl;
+    videoFrame.src = 'https://www.youtube-nocookie.com/embed/' + video.id + '?autoplay=1&rel=0&modestbranding=1';
     currentIndex = index;
+    if(nowTitle) nowTitle.textContent = video.title;
 
-    const thumbs = videoSelector.querySelectorAll('.video-thumb');
-    thumbs.forEach((thumb, i)=>{
+    videoSelector.querySelectorAll('.video-thumb').forEach((thumb, i)=>{
       thumb.classList.toggle('active', i === index);
     });
   }
@@ -160,16 +306,17 @@
     thumb.className = 'video-thumb' + (index === 0 ? ' active' : '');
     thumb.setAttribute('aria-label', 'Reproducir ' + video.title);
 
-    const thumbImg = document.createElement('img');
-    thumbImg.src = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
-    thumbImg.alt = video.title;
-    thumbImg.loading = 'lazy';
+    const img = document.createElement('img');
+    img.src = 'https://img.youtube.com/vi/' + video.id + '/mqdefault.jpg';
+    img.alt = video.title;
+    img.loading = 'lazy';
+    img.decoding = 'async';
 
-    const thumbTitle = document.createElement('span');
-    thumbTitle.textContent = video.title;
+    const title = document.createElement('span');
+    title.textContent = video.title;
 
-    thumb.appendChild(thumbImg);
-    thumb.appendChild(thumbTitle);
+    thumb.appendChild(img);
+    thumb.appendChild(title);
     thumb.addEventListener('click', ()=> loadVideo(index));
     videoSelector.appendChild(thumb);
   });
