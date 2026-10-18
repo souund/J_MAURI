@@ -28,7 +28,6 @@
 
 <title>J MAURI — Press Kit 2026</title>
 
-<!-- Recursos críticos -->
 <link rel="preload" as="image" href="assets/press/dj-mauri-logo.webp"/>
 <link rel="preload" as="image" href="assets/press/head-cover.webp" fetchpriority="high"/>
 
@@ -40,7 +39,7 @@
 </head>
 <body>
 
-<!-- ============ TELONERO (preloader) ============ -->
+<!-- ============ PRELOADER ============ -->
 <div id="intro" class="intro" role="status" aria-label="Cargando J Mauri Press Kit">
   <div class="intro-shutter intro-shutter-top"></div>
   <div class="intro-shutter intro-shutter-bottom"></div>
@@ -59,16 +58,15 @@
   </div>
 </div>
 
-<!-- ============ BARRA FLOTANTE: logo + Booking ============ -->
+<!-- ============ MINIBAR ============ -->
 <div id="minibar">
-  <a href="#head" class="logo-mark minibar-logo" style="--w:96px" aria-label="J Mauri, volver arriba">
-    <img src="assets/press/dj-mauri-logo.webp" alt="" decoding="async"/>
-    <span class="logo-text">J MAURI</span>
-  </a>
-  <a href="https://wa.me/525567777542?text=Hola%20J%20Mauri%2C%20quiero%20hablar%20de%20un%20booking" target="_blank" rel="noopener" id="wa" class="minibar-cta">
+  <a href="#head" class="minibar-logo" aria-label="J Mauri, volver arriba">J MAURI</a>
+
+  <a href="https://wa.me/525567777542?text=Hola%20J%20Mauri%2C%20quiero%20hablar%20de%20un%20booking" target="_blank" rel="noopener" class="minibar-cta">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M9.2 8.3c-.3.6-.4 1.4 0 2.3.7 1.7 2.1 3 3.8 3.8.8.3 1.6.3 2.2-.1l.6-.7-1.8-1.1-.9.7c-1-.4-1.9-1.3-2.3-2.3l.7-.9-1-1.8z"/></svg>
     <span>Booking</span>
   </a>
+
   <i class="minibar-progress" id="minibarProgress" aria-hidden="true"></i>
 </div>
 
@@ -92,7 +90,9 @@
   </div>
 
   <div class="hero-content">
-    <h1 class="hero-name chrome"><span class="hn-j">J</span> <span class="hn-m">Mauri</span></h1>
+    <h1 class="hero-logo">
+      <img src="assets/press/dj-mauri-logo.webp" alt="J Mauri" fetchpriority="high" decoding="async"/>
+    </h1>
 
     <div class="hero-socials">
       <a href="https://www.instagram.com/j_mauri_" target="_blank" rel="noopener" aria-label="Instagram">
@@ -114,9 +114,9 @@
   </div>
 </header>
 
-<!-- ============ 01 PERFIL ============ -->
+<!-- ============ PERFIL ============ -->
 <section id="info" class="section">
-  <div class="sec-head"><span class="sec-num">01</span><h2 class="section-title chrome">Perfil</h2><i class="blade"></i></div>
+  <div class="sec-rule" aria-hidden="true"><i class="blade"></i></div>
 
   <div class="tabs" role="tablist">
     <button class="tab active" role="tab" aria-selected="true" data-tab="bio">Biografía</button>
@@ -142,7 +142,7 @@
       Su recorrido incluye presentaciones en <strong>EDC México (2022 y 2025), Coca-Cola Flow Fest, Festival Internacional Cervantino, Auditorio BB</strong> y <strong>Festival Dale Mixx</strong>. También ha sido DJ oficial de las campañas de <strong>Champion</strong> en México y una de las figuras principales del colectivo <strong>Perreo de Antes</strong>.
     </p>
 
-    <h3 class="bio-sub">J Mauri como productor</h3>
+    <h3 class="bio-sub">Productor</h3>
     <p class="bio-copy">
       Detrás de las tornamesas, J Mauri desarrolla una identidad propia como productor, con <strong>más de 23 lanzamientos</strong> y cerca de <strong>700,000 reproducciones</strong> en Spotify.
     </p>
@@ -178,9 +178,12 @@
   </div>
 </section>
 
-<!-- ============ 02 SESIONES ============ -->
+<!-- ============ SESIONES ============ -->
 <section id="sesiones" class="section section-wide">
-  <div class="sec-head"><span class="sec-num">02</span><h2 class="section-title chrome">Sesiones</h2><i class="blade"></i></div>
+  <div class="sec-head">
+    <h2 class="section-title chrome">Sesiones</h2>
+    <i class="blade"></i>
+  </div>
 
   <div class="video-showcase">
     <div class="video-main">
@@ -199,53 +202,55 @@
   </div>
 </section>
 
-<!-- ============ 03 RIDER TÉCNICO ============ -->
+<!-- ============ RIDER ============ -->
 <section id="rider" class="section">
-  <div class="sec-head"><span class="sec-num">03</span><h2 class="section-title chrome">Rider técnico</h2><i class="blade"></i></div>
+  <div class="sec-head">
+    <h2 class="section-title chrome">Rider técnico</h2>
+    <i class="blade"></i>
+  </div>
 
   <div class="rider-card">
     <div class="rider-photo">
       <img src="assets/press/ridertecnico.webp" alt="Cabina Pioneer DJ" loading="lazy" decoding="async"/>
     </div>
 
-    <div class="rider-options">
-      <div class="rider-option">
-        <span class="rider-option-label">Opción 1</span>
-        <ul class="rider-list">
-          <li>CDJ-2000 / CDJ-3000 <span>(Nexus o estándar)</span></li>
-          <li>Mixer DJM-900</li>
-        </ul>
+    <div class="rider-info">
+      <div class="rider-options">
+        <div class="rider-option">
+          <span class="rider-option-label">Opción 1</span>
+          <ul class="rider-list">
+            <li>CDJ-2000 / CDJ-3000 <span>(Nexus o estándar)</span></li>
+            <li>Mixer DJM-900</li>
+          </ul>
+        </div>
+        <div class="rider-option">
+          <span class="rider-option-label">Opción 2</span>
+          <ul class="rider-list">
+            <li>XDJ-RX3</li>
+            <li>XDJ-XZ</li>
+          </ul>
+        </div>
       </div>
-      <div class="rider-option">
-        <span class="rider-option-label">Opción 2</span>
-        <ul class="rider-list">
-          <li>XDJ-RX3</li>
-          <li>XDJ-XZ</li>
-        </ul>
-      </div>
-    </div>
 
-    <p class="rider-reqs">Micrófono inalámbrico · Monitor de referencia · Agua embotellada · Hospitalidad · Espacio para artista y Staff.</p>
+      <p class="rider-reqs">Micrófono inalámbrico · Monitor de referencia · Agua embotellada · Hospitalidad · Espacio para artista y Staff.</p>
+    </div>
   </div>
 </section>
 
-<!-- ============ PIE ============ -->
+<!-- ============ FOOTER ============ -->
 <footer id="footer">
-  <div class="divider" aria-hidden="true"><i class="blade blade-l"></i><i class="star"></i><i class="blade blade-r"></i></div>
-
-  <div class="footer-grid">
-    <div class="logo-mark footer-logo" style="--w:min(74vw,340px)">
-      <img src="assets/press/dj-mauri-logo.webp" alt="J Mauri" loading="lazy" decoding="async"/>
-      <span class="logo-text">J MAURI</span>
-    </div>
-
-    <a href="mailto:jmaurimusic@gmail.com" class="footer-contact">
-      <b>Contacto</b>
-      <small>jmaurimusic@gmail.com</small>
-    </a>
+  <div class="divider" aria-hidden="true">
+    <i class="blade blade-l"></i>
+    <i class="star"></i>
+    <i class="blade blade-r"></i>
   </div>
 
-  <p>DJ MAURI - EPK 2026 x TURBOBOYZ®</p>
+  <div class="footer-actions">
+    <a href="mailto:jmaurimusic@gmail.com" class="footer-btn">Contacto</a>
+    <a href="https://wa.me/525567777542?text=Hola%20J%20Mauri%2C%20quiero%20hablar%20de%20un%20booking" target="_blank" rel="noopener" class="footer-btn footer-btn-accent">Booking</a>
+  </div>
+
+  <p>EPK 2026 x TURBOBOYZ®</p>
 </footer>
 
 <div class="lightbox" id="lightbox">
