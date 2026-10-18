@@ -1,10 +1,23 @@
 /* ==========================================================================
-   J MAURI — PRESS KIT 2026 — script v5
+   J MAURI — PRESS KIT 2026 — script v6
    - Telonero: logo + barra de carga real + persianas
-   - Mini barra al salir del head, tabs, lightbox, navdots, reveal, videos
+   - Logo recortado en barra flotante y pie (detecta si el arte es vertical)
+   - Reloj CDMX, barra flotante con progreso, tabs, lightbox, navdots, videos
    ========================================================================== */
 
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const LOGO_SRC = 'assets/press/dj-mauri-logo.webp';
+
+// ---------- LOGO: detecta si es el arte vertical (para recortarlo) o fallo ----------
+(function initLogoMode(){
+  const root = document.documentElement;
+  const img = new Image();
+  img.onload = ()=>{
+    if(img.naturalHeight / img.naturalWidth > 1.3) root.classList.add('logo-tall');
+  };
+  img.onerror = ()=> root.classList.add('logo-failed');
+  img.src = LOGO_SRC;
+})();
 
 // ---------- TELONERO (preloader) ----------
 (function initIntro(){
@@ -28,7 +41,6 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const HARD_MS = 8000;                   // seguro: nunca se queda trabado
   const start   = performance.now();
 
-  // Si el logo es el arte vertical (alto > ancho), se recorta a la franja del logo
   function checkLogo(){
     if(!logo.naturalWidth){ intro.classList.add('logo-failed'); return; }
     if(logo.naturalHeight / logo.naturalWidth > 1.3) wrap.classList.add('is-tall');
@@ -54,8 +66,8 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   cover.onload = cover.onerror = tick;
   cover.src = 'assets/press/head-cover.webp';
 
-  let p = 0;            // progreso mostrado (0..1)
-  let forced = false;   // el usuario tocó para saltar
+  let p = 0;
+  let forced = false;
   let dropped = false;
 
   function frame(now){
@@ -89,7 +101,6 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }, REDUCED ? 100 : 700);
   }
 
-  // Tocar para saltar (una vez que el logo ya apareció)
   intro.addEventListener('click', ()=>{
     if(performance.now() - start > 900) forced = true;
   });
@@ -97,18 +108,41 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   requestAnimationFrame(frame);
 })();
 
-// ---------- MINI BARRA ----------
+// ---------- RELOJ DE CDMX (el club no cierra) ----------
+(function initClock(){
+  const el = document.getElementById('clock');
+  if(!el) return;
+  let fmt;
+  try {
+    fmt = new Intl.DateTimeFormat('es-MX', {
+      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Mexico_City'
+    });
+  } catch(e){ return; }
+  const tick = () => { el.textContent = 'CDMX · ' + fmt.format(new Date()); };
+  tick();
+  setInterval(tick, 15000);
+})();
+
+// ---------- BARRA FLOTANTE: aparece al salir del head + progreso ----------
 (function initMinibar(){
   const hero = document.getElementById('head');
+  const progress = document.getElementById('minibarProgress');
   if(!hero) return;
+
   let ticking = false;
   function update(){
-    document.body.classList.toggle('past-hero', window.scrollY > hero.offsetHeight - 140);
+    const y = window.scrollY;
+    document.body.classList.toggle('past-hero', y > hero.offsetHeight - 140);
+    if(progress){
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0).toFixed(4) + ')';
+    }
     ticking = false;
   }
   window.addEventListener('scroll', ()=>{
     if(!ticking){ ticking = true; requestAnimationFrame(update); }
   }, { passive:true });
+  window.addEventListener('resize', update);
   update();
 })();
 
