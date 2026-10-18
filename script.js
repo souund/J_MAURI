@@ -1,13 +1,12 @@
 /* ==========================================================================
-   J MAURI — PRESS KIT 2026 — script v4
-   - Telonero sincronizado con la carga real (fuentes + logo + portada)
-   - Hero con EQ pausable, parallax ligero y mini barra
-   - Waveform divider, "now playing", tabs, lightbox, navdots
+   J MAURI — PRESS KIT 2026 — script v5
+   - Telonero: logo + barra de carga real + persianas
+   - Mini barra al salir del head, tabs, lightbox, navdots, reveal, videos
    ========================================================================== */
 
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ---------- TELONERO ----------
+// ---------- TELONERO (preloader) ----------
 (function initIntro(){
   const body = document.body;
   const intro = document.getElementById('intro');
@@ -21,34 +20,36 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   body.classList.add('intro-lock');
 
-  const bar   = document.getElementById('introBar');
-  const label = document.getElementById('introLabel');
-  const bpm   = document.getElementById('introBpm');
-  const logo  = document.getElementById('introLogo');
+  const bar  = document.getElementById('introBar');
+  const wrap = document.getElementById('introWrap');
+  const logo = document.getElementById('introLogo');
 
-  const MIN_MS  = REDUCED ? 900 : 3600;   // duración mínima del telonero
+  const MIN_MS  = REDUCED ? 900 : 3200;   // duración mínima del telonero
   const HARD_MS = 8000;                   // seguro: nunca se queda trabado
   const start   = performance.now();
 
-  // Recursos reales que esperamos
+  // Si el logo es el arte vertical (alto > ancho), se recorta a la franja del logo
+  function checkLogo(){
+    if(!logo.naturalWidth){ intro.classList.add('logo-failed'); return; }
+    if(logo.naturalHeight / logo.naturalWidth > 1.3) wrap.classList.add('is-tall');
+  }
+
+  // Recursos reales que esperamos: logo, fuentes y portada
   let done = 0;
   const TOTAL = 3;
   const tick = () => { done = Math.min(TOTAL, done + 1); };
 
-  // 1) logo del telonero
-  if(logo.complete){
-    if(logo.naturalWidth === 0) intro.classList.add('logo-failed');
-    tick();
-  } else {
-    logo.addEventListener('load', tick, { once:true });
+  if(logo.complete){ checkLogo(); tick(); }
+  else {
+    logo.addEventListener('load',  ()=>{ checkLogo(); tick(); }, { once:true });
     logo.addEventListener('error', ()=>{ intro.classList.add('logo-failed'); tick(); }, { once:true });
   }
-  // 2) fuentes
+
   if(document.fonts && document.fonts.ready){
     document.fonts.ready.then(tick, tick);
-    setTimeout(()=>{ if(done < TOTAL) tick(); }, 2500); // si las fuentes tardan, no bloquear
+    setTimeout(()=>{ if(done < TOTAL) tick(); }, 2500);
   } else { tick(); }
-  // 3) portada del hero
+
   const cover = new Image();
   cover.onload = cover.onerror = tick;
   cover.src = 'assets/press/head-cover.webp';
@@ -68,11 +69,6 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(target === 1 && p > 0.995) p = 1;
 
     bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
-    bpm.textContent = String(Math.round(p * 128)).padStart(3, '0') + ' BPM';
-    label.textContent =
-      p >= 1   ? 'DROP' :
-      p > 0.7  ? 'CUE READY' :
-      p > 0.3  ? 'SYNCING BEATS' : 'LOADING SET';
 
     if(p >= 1 || elapsed > HARD_MS){ drop(); return; }
     requestAnimationFrame(frame);
@@ -82,8 +78,6 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(dropped) return;
     dropped = true;
     bar.style.transform = 'scaleX(1)';
-    bpm.textContent = '128 BPM';
-    label.textContent = 'DROP';
     intro.classList.add('is-drop');
 
     setTimeout(()=>{
@@ -92,10 +86,10 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       ready();
       try { sessionStorage.setItem('jmauri_intro_seen', '1'); } catch(e){}
       setTimeout(()=> intro.remove(), 1200);
-    }, REDUCED ? 100 : 750);
+    }, REDUCED ? 100 : 700);
   }
 
-  // Tocar para saltar (después de que el logo ya apareció)
+  // Tocar para saltar (una vez que el logo ya apareció)
   intro.addEventListener('click', ()=>{
     if(performance.now() - start > 900) forced = true;
   });
@@ -103,86 +97,19 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   requestAnimationFrame(frame);
 })();
 
-// ---------- HERO: ECUALIZADOR ----------
-(function initHeroEq(){
-  const eq = document.getElementById('heroEq');
-  if(!eq) return;
+// ---------- MINI BARRA ----------
+(function initMinibar(){
   const hero = document.getElementById('head');
-  const BARS = window.innerWidth < 560 ? 32 : 64;
-
-  // Pseudo-aleatorio determinista: mismo patrón en cada visita
-  let seed = 7;
-  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-
-  const frag = document.createDocumentFragment();
-  for(let i = 0; i < BARS; i++){
-    const b = document.createElement('i');
-    b.className = 'eq-bar';
-    // más energía hacia el centro, como un espectro real
-    const centre = 1 - Math.abs(i / (BARS - 1) - 0.5) * 1.1;
-    b.style.setProperty('--min', (0.08 + rnd() * 0.12).toFixed(2));
-    b.style.setProperty('--max', (0.25 + rnd() * 0.75 * centre).toFixed(2));
-    b.style.setProperty('--dur', (0.55 + rnd() * 0.9).toFixed(2) + 's');
-    b.style.setProperty('--delay', (-rnd() * 2).toFixed(2) + 's');
-    frag.appendChild(b);
-  }
-  eq.appendChild(frag);
-
-  // Pausar animaciones cuando el hero no se ve
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(([e])=>{
-      hero.classList.toggle('is-paused', !e.isIntersecting);
-    }, { threshold: 0 }).observe(hero);
-  }
-})();
-
-// ---------- HERO: PARALLAX + MINI BARRA ----------
-(function initScrollFx(){
-  const hero = document.getElementById('head');
-  const img = hero && hero.querySelector('.hero-bg img');
   if(!hero) return;
-
   let ticking = false;
   function update(){
-    const y = window.scrollY;
-    const h = hero.offsetHeight;
-    document.body.classList.toggle('past-hero', y > h - 140);
-    if(img && !REDUCED && y < h){
-      img.style.transform = 'translate3d(0,' + (y * 0.22).toFixed(1) + 'px,0)';
-    }
+    document.body.classList.toggle('past-hero', window.scrollY > hero.offsetHeight - 140);
     ticking = false;
   }
   window.addEventListener('scroll', ()=>{
     if(!ticking){ ticking = true; requestAnimationFrame(update); }
   }, { passive:true });
   update();
-
-  // "Escuchar" abre directamente la pestaña Música
-  const listen = document.getElementById('heroListen');
-  if(listen){
-    listen.addEventListener('click', ()=>{
-      const t = document.querySelector('.tab[data-tab="musica"]');
-      if(t) t.click();
-    });
-  }
-})();
-
-// ---------- WAVEFORM DIVIDER ----------
-(function initWave(){
-  const wave = document.getElementById('wave');
-  if(!wave) return;
-  const N = window.innerWidth < 560 ? 56 : 90;
-  const frag = document.createDocumentFragment();
-  for(let i = 0; i < N; i++){
-    const t = i / N;
-    // forma tipo pista: intro suave, build, drop y salida
-    const env = 0.25 + 0.75 * Math.pow(Math.sin(Math.PI * t), 0.6);
-    const v = Math.abs(Math.sin(i * 1.7) * 0.55 + Math.sin(i * 0.43 + 1) * 0.45);
-    const bar = document.createElement('i');
-    bar.style.setProperty('--h', Math.max(6, Math.round((8 + v * 46) * env)) + 'px');
-    frag.appendChild(bar);
-  }
-  wave.appendChild(frag);
 })();
 
 // ---------- REVEAL AL SCROLL ----------
@@ -270,11 +197,10 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
 })();
 
-// ---------- SESIONES: selector + NOW PLAYING ----------
+// ---------- SESIONES: selector de videos ----------
 (function initVideoSelector(){
   const videoFrame = document.getElementById('videoFrame');
   const videoSelector = document.getElementById('videoSelector');
-  const nowTitle = document.getElementById('nowTitle');
   if(!videoFrame || !videoSelector) return;
 
   const videos = [
@@ -294,7 +220,6 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const video = videos[index];
     videoFrame.src = 'https://www.youtube-nocookie.com/embed/' + video.id + '?autoplay=1&rel=0&modestbranding=1';
     currentIndex = index;
-    if(nowTitle) nowTitle.textContent = video.title;
 
     videoSelector.querySelectorAll('.video-thumb').forEach((thumb, i)=>{
       thumb.classList.toggle('active', i === index);
