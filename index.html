@@ -28,46 +28,38 @@
 
 <title>J MAURI — Press Kit 2026</title>
 
-<!-- Recursos críticos: el telonero y el hero cargan primero -->
-<link rel="preload" as="image" href="assets/press/jmauri-intro.webp"/>
+<!-- Recursos críticos -->
+<link rel="preload" as="image" href="assets/press/dj-mauri-logo.webp"/>
 <link rel="preload" as="image" href="assets/press/head-cover.webp" fetchpriority="high"/>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Anton&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Anton&display=swap" rel="stylesheet"/>
 
 <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
-<!-- ============ TELONERO / INTRO ============ -->
+<!-- ============ TELONERO (preloader) ============ -->
 <div id="intro" class="intro" role="status" aria-label="Cargando J Mauri Press Kit">
   <div class="intro-shutter intro-shutter-top"></div>
   <div class="intro-shutter intro-shutter-bottom"></div>
 
   <div class="intro-stage">
-    <div class="intro-haze"></div>
-    <div class="intro-beams" aria-hidden="true"><i></i><i></i><i></i></div>
-
-    <div class="intro-logo-wrap">
+    <div class="intro-logo-wrap" id="introWrap">
       <h2 class="intro-fallback">J MAURI</h2>
-      <img id="introLogo" class="intro-logo" src="assets/press/jmauri-intro.webp" alt="J Mauri — Official Press Kit" decoding="async" fetchpriority="high"/>
+      <img id="introLogo" class="intro-logo" src="assets/press/dj-mauri-logo.webp" alt="J Mauri" decoding="async" fetchpriority="high"
+           onerror="this.closest('.intro').classList.add('logo-failed')"/>
       <span class="intro-sweep" aria-hidden="true"></span>
     </div>
 
-    <div class="intro-hud">
+    <div class="intro-hud" aria-hidden="true">
       <span class="intro-line"><b id="introBar"></b></span>
-      <div class="intro-meta">
-        <span id="introLabel">LOADING SET</span>
-        <span id="introBpm">000 BPM</span>
-      </div>
     </div>
   </div>
-
-  <div class="intro-flash" aria-hidden="true"></div>
 </div>
 
-<!-- Mini barra: aparece al salir del hero -->
+<!-- Mini barra: aparece al salir del head -->
 <div id="minibar" aria-hidden="true">
   <a href="#head" class="minibar-name">J MAURI</a>
   <a href="#contacto" class="minibar-cta">Booking</a>
@@ -81,14 +73,12 @@
   <a href="#rider" class="navdot" data-label="Rider"></a>
 </nav>
 
-<!-- ============ HERO ============ -->
+<!-- ============ HEAD ============ -->
 <header id="head" class="hero">
   <div class="hero-bg">
     <img src="assets/press/head-cover.webp" alt="" fetchpriority="high"/>
   </div>
-  <div class="hero-beams" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="hero-scrim"></div>
-  <div class="hero-grain" aria-hidden="true"></div>
 
   <div class="hero-top">
     <span>EPK 2026</span>
@@ -96,44 +86,26 @@
   </div>
 
   <div class="hero-content">
-    <p class="hero-role">DJ <i>•</i> Productor <i>•</i> Artista</p>
-    <h1 class="hero-name">J Mauri</h1>
-    <p class="hero-genres">Reggaetón · Perreo · Urban · Open Format</p>
-
-    <ul class="hero-stats">
-      <li><b>8+</b><span>Años</span></li>
-      <li><b>23+</b><span>Lanzamientos</span></li>
-      <li><b>700K</b><span>Streams</span></li>
-    </ul>
-
-    <div class="hero-cta">
-      <a href="#contacto" class="btn-chrome">Booking</a>
-      <a href="#info" class="btn-ghost" id="heroListen">Escuchar</a>
-    </div>
+    <h1 class="hero-name"><span class="hn-j">J</span> <span class="hn-m">Mauri</span></h1>
 
     <div class="hero-socials">
       <a href="https://www.instagram.com/j_mauri_" target="_blank" rel="noopener" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.9"/><circle cx="17.2" cy="6.8" r=".7" fill="currentColor" stroke="none"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.9"/><circle cx="17.2" cy="6.8" r=".7" fill="currentColor" stroke="none"/></svg>
       </a>
       <a href="https://www.tiktok.com/@j_mauri_" target="_blank" rel="noopener" aria-label="TikTok">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14.2 3.5v11.2a3.7 3.7 0 1 1-3.7-3.7"/><path d="M14.2 3.5c.3 2.5 1.9 4.2 4.8 4.5"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.2 3.5v11.2a3.7 3.7 0 1 1-3.7-3.7"/><path d="M14.2 3.5c.3 2.5 1.9 4.2 4.8 4.5"/></svg>
       </a>
       <a href="https://www.facebook.com/share/18TDF5UQCJ/" target="_blank" rel="noopener" aria-label="Facebook">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 3.5h-1.5A3.8 3.8 0 0 0 9.5 7.3V10H7v3.4h2.5v7.1h3.6v-7.1h2.6l.6-3.4h-3.2V7.6c0-.6.4-1 1-1h1.7z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 3.5h-1.5A3.8 3.8 0 0 0 9.5 7.3V10H7v3.4h2.5v7.1h3.6v-7.1h2.6l.6-3.4h-3.2V7.6c0-.6.4-1 1-1h1.7z"/></svg>
       </a>
       <a href="https://open.spotify.com/artist/5e2QMokByimjpy5prPACGj" target="_blank" rel="noopener" aria-label="Spotify">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M7.2 9.4c3.5-.9 7.1-.6 9.9 1.1"/><path d="M7.7 12.6c2.9-.7 5.7-.4 8.2 1"/><path d="M8.3 15.6c2.2-.5 4.3-.3 6.2.8"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M7.2 9.4c3.5-.9 7.1-.6 9.9 1.1"/><path d="M7.7 12.6c2.9-.7 5.7-.4 8.2 1"/><path d="M8.3 15.6c2.2-.5 4.3-.3 6.2.8"/></svg>
       </a>
       <a href="https://music.apple.com/mx/artist/j-mauri/1495328049" target="_blank" rel="noopener" aria-label="Apple Music">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.5V6.6l9-1.9v10.9"/><path d="M9 10.2l9-1.9"/><circle cx="6.8" cy="17.6" r="2.2"/><circle cx="15.8" cy="15.7" r="2.2"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.5V6.6l9-1.9v10.9"/><path d="M9 10.2l9-1.9"/><circle cx="6.8" cy="17.6" r="2.2"/><circle cx="15.8" cy="15.7" r="2.2"/></svg>
       </a>
     </div>
   </div>
-
-  <div class="hero-eq" id="heroEq" aria-hidden="true"></div>
-  <a href="#info" class="hero-cue" aria-label="Bajar">
-    <span></span>
-  </a>
 </header>
 
 <!-- ============ INFO — tabs ============ -->
@@ -148,7 +120,6 @@
     <div class="fact-strip">
       <div class="fact-row"><span class="fact-row-label">Trayectoria</span><span class="fact-row-value">+8 años</span></div>
       <div class="fact-row"><span class="fact-row-label">Origen</span><span class="fact-row-value">CDMX</span></div>
-      <div class="fact-row"><span class="fact-row-label">Giras Colombia</span><span class="fact-row-value">2 desde 2023</span></div>
       <div class="fact-row fact-row-genres"><span class="fact-row-label">Géneros</span><span class="fact-row-value">Reggaetón, Perreo, Urban, Latin, Open Format</span></div>
     </div>
 
@@ -199,7 +170,7 @@
   </div>
 </section>
 
-<div class="wave" id="wave" aria-hidden="true"></div>
+<div class="divider" aria-hidden="true"><span></span></div>
 
 <!-- ============ SESIONES ============ -->
 <section id="sesiones" class="section section-wide">
@@ -218,21 +189,23 @@
         height="100%">
       </iframe>
     </div>
-    <p class="now-playing"><span class="np-dot"></span><em>Now playing</em><b id="nowTitle">Mauryseo Vol. 3</b></p>
     <div class="video-selector" id="videoSelector" role="menu" aria-label="Selector de videos"></div>
   </div>
 </section>
 
 <!-- ============ BOOKING ============ -->
-<section id="contacto" class="section section-contact">
+<section id="contacto" class="section">
   <h2 class="section-title">Booking &amp; Contacto</h2>
-  <div class="contact-ctas">
-    <a href="https://wa.me/525567777542?text=Hola%20J%20Mauri%2C%20quiero%20hablar%20de%20un%20booking" target="_blank" rel="noopener" id="wa">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="19" height="19"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.3.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.2-.9.9-.9 2.1 0 1.3.9 2.5 1.1 2.7.1.2 1.8 2.8 4.5 3.8.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
-      BOOKING
+  <div class="contact-grid">
+    <a href="https://wa.me/525567777542?text=Hola%20J%20Mauri%2C%20quiero%20hablar%20de%20un%20booking" target="_blank" rel="noopener" id="wa" class="contact-card contact-card-main">
+      <svg class="cc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/><path d="M9.2 8.3c-.3.6-.4 1.4 0 2.3.7 1.7 2.1 3 3.8 3.8.8.3 1.6.3 2.2-.1l.6-.7-1.8-1.1-.9.7c-1-.4-1.9-1.3-2.3-2.3l.7-.9-1-1.8z"/></svg>
+      <span class="cc-text"><b>Booking</b><small>WhatsApp</small></span>
+      <svg class="cc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
     </a>
-    <a href="mailto:jmaurimusic@gmail.com" id="mail-cta">
-      MAIL
+    <a href="mailto:jmaurimusic@gmail.com" id="mail-cta" class="contact-card">
+      <svg class="cc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.8 7.2l8.2 6 8.2-6"/></svg>
+      <span class="cc-text"><b>Contacto</b><small>jmaurimusic@gmail.com</small></span>
+      <svg class="cc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
     </a>
   </div>
 </section>
