@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<meta name="theme-color" content="#050814"/>
+<meta name="theme-color" content="#050507"/>
+<script>document.documentElement.classList.add('js');</script>
 
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
@@ -19,7 +20,7 @@
 <meta property="twitter:description" content="Press Kit oficial de J Mauri. Música urbana y más de 8 años de trayectoria entre México y Colombia.">
 <meta property="twitter:image" content="https://souund.github.io/J_MAURI/assets/press/og-image.webp">
 
-<meta name="description" content="J Mauri — DJ y Productor Musical. Press Kit oficial 2026."/>
+<meta name="description" content="J Mauri — DJ, Productor y Artista. Press Kit oficial 2026."/>
 <link rel="canonical" href="https://souund.github.io/J_MAURI/"/>
 
 <link rel="icon" type="image/webp" href="assets/press/favicon.webp"/>
@@ -27,18 +28,49 @@
 
 <title>J MAURI — Press Kit 2026</title>
 
+<!-- Recursos críticos: el telonero y el hero cargan primero -->
+<link rel="preload" as="image" href="assets/press/jmauri-intro.webp"/>
+<link rel="preload" as="image" href="assets/press/head-cover.webp" fetchpriority="high"/>
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Anton&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Anton&display=swap" rel="stylesheet"/>
 
 <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
-<!-- ============ INTRO / SPLASH ============ -->
-<div id="intro" class="intro">
-  <div class="intro-glow"></div>
-  <img class="intro-logo" src="assets/press/dj-mauri-logo.webp" alt="J Mauri"/>
+<!-- ============ TELONERO / INTRO ============ -->
+<div id="intro" class="intro" role="status" aria-label="Cargando J Mauri Press Kit">
+  <div class="intro-shutter intro-shutter-top"></div>
+  <div class="intro-shutter intro-shutter-bottom"></div>
+
+  <div class="intro-stage">
+    <div class="intro-haze"></div>
+    <div class="intro-beams" aria-hidden="true"><i></i><i></i><i></i></div>
+
+    <div class="intro-logo-wrap">
+      <h2 class="intro-fallback">J MAURI</h2>
+      <img id="introLogo" class="intro-logo" src="assets/press/jmauri-intro.webp" alt="J Mauri — Official Press Kit" decoding="async" fetchpriority="high"/>
+      <span class="intro-sweep" aria-hidden="true"></span>
+    </div>
+
+    <div class="intro-hud">
+      <span class="intro-line"><b id="introBar"></b></span>
+      <div class="intro-meta">
+        <span id="introLabel">LOADING SET</span>
+        <span id="introBpm">000 BPM</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro-flash" aria-hidden="true"></div>
+</div>
+
+<!-- Mini barra: aparece al salir del hero -->
+<div id="minibar" aria-hidden="true">
+  <a href="#head" class="minibar-name">J MAURI</a>
+  <a href="#contacto" class="minibar-cta">Booking</a>
 </div>
 
 <nav id="navdots" aria-label="Navegación de secciones">
@@ -49,37 +81,59 @@
   <a href="#rider" class="navdot" data-label="Rider"></a>
 </nav>
 
-<!-- ============ HEAD (sticky) ============ -->
-<header id="head" class="head">
-  <div class="head-bg">
-    <img src="assets/press/head-cover.webp" alt=""/>
-    <div class="head-scrim"></div>
+<!-- ============ HERO ============ -->
+<header id="head" class="hero">
+  <div class="hero-bg">
+    <img src="assets/press/head-cover.webp" alt="" fetchpriority="high"/>
+  </div>
+  <div class="hero-beams" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-grain" aria-hidden="true"></div>
+
+  <div class="hero-top">
+    <span>EPK 2026</span>
+    <span>CDMX · MX</span>
   </div>
 
-  <div class="head-inner">
-    <div class="head-text">
-      <p class="head-eyebrow">DJ &amp; Productor</p>
-      <h1 class="head-name">J Mauri</h1>
+  <div class="hero-content">
+    <p class="hero-role">DJ <i>•</i> Productor <i>•</i> Artista</p>
+    <h1 class="hero-name">J Mauri</h1>
+    <p class="hero-genres">Reggaetón · Perreo · Urban · Open Format</p>
+
+    <ul class="hero-stats">
+      <li><b>8+</b><span>Años</span></li>
+      <li><b>23+</b><span>Lanzamientos</span></li>
+      <li><b>700K</b><span>Streams</span></li>
+    </ul>
+
+    <div class="hero-cta">
+      <a href="#contacto" class="btn-chrome">Booking</a>
+      <a href="#info" class="btn-ghost" id="heroListen">Escuchar</a>
+    </div>
+
+    <div class="hero-socials">
+      <a href="https://www.instagram.com/j_mauri_" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.9"/><circle cx="17.2" cy="6.8" r=".7" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@j_mauri_" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14.2 3.5v11.2a3.7 3.7 0 1 1-3.7-3.7"/><path d="M14.2 3.5c.3 2.5 1.9 4.2 4.8 4.5"/></svg>
+      </a>
+      <a href="https://www.facebook.com/share/18TDF5UQCJ/" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 3.5h-1.5A3.8 3.8 0 0 0 9.5 7.3V10H7v3.4h2.5v7.1h3.6v-7.1h2.6l.6-3.4h-3.2V7.6c0-.6.4-1 1-1h1.7z"/></svg>
+      </a>
+      <a href="https://open.spotify.com/artist/5e2QMokByimjpy5prPACGj" target="_blank" rel="noopener" aria-label="Spotify">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M7.2 9.4c3.5-.9 7.1-.6 9.9 1.1"/><path d="M7.7 12.6c2.9-.7 5.7-.4 8.2 1"/><path d="M8.3 15.6c2.2-.5 4.3-.3 6.2.8"/></svg>
+      </a>
+      <a href="https://music.apple.com/mx/artist/j-mauri/1495328049" target="_blank" rel="noopener" aria-label="Apple Music">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.5V6.6l9-1.9v10.9"/><path d="M9 10.2l9-1.9"/><circle cx="6.8" cy="17.6" r="2.2"/><circle cx="15.8" cy="15.7" r="2.2"/></svg>
+      </a>
     </div>
   </div>
 
-  <div class="head-socials">
-    <a href="https://www.instagram.com/j_mauri_" target="_blank" rel="noopener" aria-label="Instagram">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c-2.7 0-3 .01-4.05.06-1.05.05-1.77.22-2.4.46-.65.25-1.2.6-1.75 1.14-.54.55-.89 1.1-1.14 1.75-.24.63-.41 1.35-.46 2.4C2.2 9 2.19 9.3 2.19 12s.01 3 .06 4.05c.05 1.05.22 1.77.46 2.4.25.65.6 1.2 1.14 1.75.55.54 1.1.89 1.75 1.14.63.24 1.35.41 2.4.46 1.05.05 1.35.06 4.05.06s3-.01 4.05-.06c1.05-.05 1.77-.22 2.4-.46.65-.25 1.2-.6 1.75-1.14.54-.55.89-1.1 1.14-1.75.24-.63.41-1.35.46-2.4.05-1.05.06-1.35.06-4.05s-.01-3-.06-4.05c-.05-1.05-.22-1.77-.46-2.4a4.85 4.85 0 0 0-1.14-1.75 4.85 4.85 0 0 0-1.75-1.14c-.63-.24-1.35-.41-2.4-.46C15 2.21 14.7 2.2 12 2.2zm0 1.8c2.67 0 2.99.01 4.04.06.97.04 1.5.21 1.86.35.47.18.8.4 1.15.74.34.35.56.68.74 1.15.14.36.31.89.35 1.86.05 1.05.06 1.37.06 4.04s-.01 2.99-.06 4.04c-.04.97-.21 1.5-.35 1.86-.18.47-.4.8-.74 1.15-.35.34-.68.56-1.15.74-.36.14-.89.31-1.86.35-1.05.05-1.37.06-4.04.06s-2.99-.01-4.04-.06c-.97-.04-1.5-.21-1.86-.35a3.1 3.1 0 0 1-1.15-.74 3.1 3.1 0 0 1-.74-1.15c-.14-.36-.31-.89-.35-1.86C4.01 14.99 4 14.67 4 12s.01-2.99.06-4.04c.04-.97.21-1.5.35-1.86.18-.47.4-.8.74-1.15.35-.34.68-.56 1.15-.74.36-.14.89-.31 1.86-.35C9.01 4.01 9.33 4 12 4zm0 3.06A4.94 4.94 0 1 0 12 17a4.94 4.94 0 0 0 0-9.88zm0 8.15a3.21 3.21 0 1 1 0-6.42 3.21 3.21 0 0 1 0 6.42zm6.29-8.35a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0z"/></svg>
-    </a>
-    <a href="https://www.tiktok.com/@j_mauri_" target="_blank" rel="noopener" aria-label="TikTok">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.5 3h-3.1v12.5a2.6 2.6 0 1 1-2.6-2.6c.27 0 .53.04.78.12V9.86a5.9 5.9 0 0 0-.78-.05A5.86 5.86 0 1 0 15.66 15.7V9.4a7.36 7.36 0 0 0 4.34 1.4V7.7a4.28 4.28 0 0 1-3.4-1.88z"/></svg>
-    </a>
-    <a href="https://www.facebook.com/share/18TDF5UQCJ/" target="_blank" rel="noopener" aria-label="Facebook">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.24 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.49-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.44 2.91h-2.34V22C18.34 21.24 22 17.08 22 12.06z"/></svg>
-    </a>
-    <a href="https://open.spotify.com/artist/5e2QMokByimjpy5prPACGj" target="_blank" rel="noopener" aria-label="Spotify">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 14.43a.75.75 0 0 1-1.03.25c-2.82-1.72-6.37-2.11-10.55-1.16a.75.75 0 0 1-.33-1.46c4.57-1.04 8.5-.6 11.66 1.34.35.22.46.68.25 1.03zm1.23-2.74a.94.94 0 0 1-1.29.31c-3.23-1.98-8.15-2.56-11.97-1.4a.94.94 0 0 1-.54-1.8c4.36-1.32 9.78-.68 13.49 1.6.44.27.58.85.31 1.29zm.11-2.86C14.1 8.53 7.9 8.32 4.2 9.44a1.12 1.12 0 1 1-.65-2.15C7.8 6.04 14.65 6.28 19 8.87a1.12 1.12 0 0 1-1.15 1.92z"/></svg>
-    </a>
-    <a href="https://music.apple.com/mx/artist/j-mauri/1495328049" target="_blank" rel="noopener" aria-label="Apple Music">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.4a1.6 1.6 0 0 0-1.33-.31L8.2 5.6A1.6 1.6 0 0 0 7 7.14v8.36a3.63 3.63 0 0 0-2-.6A3.5 3.5 0 1 0 8.5 18.4V9.1l9.1-2.06v6.46a3.63 3.63 0 0 0-2-.6 3.5 3.5 0 1 0 3.5 3.5V4.75c0-.54-.25-1.05-.7-1.35z"/></svg>
-    </a>
-  </div>
+  <div class="hero-eq" id="heroEq" aria-hidden="true"></div>
+  <a href="#info" class="hero-cue" aria-label="Bajar">
+    <span></span>
+  </a>
 </header>
 
 <!-- ============ INFO — tabs ============ -->
@@ -92,32 +146,49 @@
 
   <div class="tab-panel active" id="panel-bio">
     <div class="fact-strip">
-      <div class="fact-row"><span class="fact-row-label">Trayectoria</span><span class="fact-row-value">8 años</span></div>
+      <div class="fact-row"><span class="fact-row-label">Trayectoria</span><span class="fact-row-value">+8 años</span></div>
       <div class="fact-row"><span class="fact-row-label">Origen</span><span class="fact-row-value">CDMX</span></div>
+      <div class="fact-row"><span class="fact-row-label">Giras Colombia</span><span class="fact-row-value">2 desde 2023</span></div>
       <div class="fact-row fact-row-genres"><span class="fact-row-label">Géneros</span><span class="fact-row-value">Reggaetón, Perreo, Urban, Latin, Open Format</span></div>
     </div>
+
+    <p class="bio-kicker">DJ • Productor • Artista</p>
     <p class="bio-copy">
-      Una de las figuras principales del colectivo <strong>Perreo De Antes</strong>, J Mauri ha llevado su sonido de los mejores clubes de la República Mexicana y a la escena de Medellín, Colombia, con dos giras desde 2023. Ha compartido escenario con <strong>DJ Playero, Kevin Roldán, Bellakath</strong> y <strong>Mad Fuentes</strong>, ha sido DJ oficial en giras de <strong>Snow Tha Product</strong> y <strong>Milo Mae</strong>, y se ha presentado en <strong>EDC México, Coca-Cola Flow Fest</strong> y el Festival Internacional Cervantino — además de ser DJ oficial de las campañas de <strong>Champion</strong> en México.
+      Con más de <strong>8 años de trayectoria</strong>, J Mauri ha llevado su sonido a muchos de los clubes y escenarios más destacados de la Ciudad de México y toda la República Mexicana, de norte a sur, expandiendo su presencia también a nivel internacional.
     </p>
     <p class="bio-copy">
-      Como productor acumula <strong>más de 23 lanzamientos</strong> y cerca de <strong>700,000 reproducciones</strong> en Spotify, con Déjate Llevar, Animal y Mundo Diferente entre sus temas más escuchados. Su lanzamiento más reciente: <strong>Ciudad Romántica</strong> (2026), un mixtape colaborativo.
+      Desde 2023 ha realizado <strong>dos giras por Colombia</strong>, consolidando su proyección fuera de México. A lo largo de su carrera ha compartido escenario con artistas como <strong>DJ Playero, Kevin Roldán, Bellakath, Standly, El Bogueto</strong> y <strong>Carlos Cortés</strong>. Además, ha participado como DJ oficial en giras de <strong>Snow Tha Product, Milo Mae</strong> y <strong>Mad Fuentes</strong>.
+    </p>
+    <p class="bio-copy">
+      Su recorrido incluye presentaciones en <strong>EDC México (2022 y 2025), Coca-Cola Flow Fest, Festival Internacional Cervantino, Auditorio BB</strong> y <strong>Festival Dale Mixx</strong>. También ha sido DJ oficial de las campañas de <strong>Champion</strong> en México y una de las figuras principales del colectivo <strong>Perreo de Antes</strong>.
+    </p>
+
+    <h3 class="bio-sub">J Mauri como productor</h3>
+    <p class="bio-copy">
+      Detrás de las tornamesas, J Mauri desarrolla una identidad propia como productor, con <strong>más de 23 lanzamientos</strong> y cerca de <strong>700,000 reproducciones</strong> en Spotify.
+    </p>
+    <p class="bio-copy">
+      Entre sus temas más escuchados destacan <strong>Déjate Llevar</strong> (junto a Jey F), <strong>Animal</strong> y <strong>Mundo Diferente</strong>.
+    </p>
+    <p class="bio-copy">
+      En 2026 presenta <strong>Ciudad Romántica</strong>, un mixtape colaborativo que marca un nuevo capítulo en su evolución musical.
     </p>
   </div>
 
   <div class="tab-panel" id="panel-galeria">
     <div class="gallery-grid">
-      <button class="gallery-item span-tall" data-full="assets/press/vertical_1.webp"><img src="assets/press/vertical_1.webp" alt="J Mauri, retrato vertical" loading="lazy"/></button>
-      <button class="gallery-item" data-full="assets/press/normal_1.webp"><img src="assets/press/normal_1.webp" alt="J Mauri, retrato de estudio" loading="lazy"/></button>
-      <button class="gallery-item" data-full="assets/press/normal_2.webp"><img src="assets/press/normal_2.webp" alt="J Mauri, retrato de estudio" loading="lazy"/></button>
-      <button class="gallery-item span-wide" data-full="assets/press/horizontal_1.webp"><img src="assets/press/horizontal_1.webp" alt="J Mauri en set, festival" loading="lazy"/></button>
-      <button class="gallery-item span-tall" data-full="assets/press/vertical_2.webp"><img src="assets/press/vertical_2.webp" alt="J Mauri en cabina" loading="lazy"/></button>
-      <button class="gallery-item" data-full="assets/press/normal_3.webp"><img src="assets/press/normal_3.webp" alt="J Mauri, retrato" loading="lazy"/></button>
-      <button class="gallery-item span-wide" data-full="assets/press/horizontal_2.webp"><img src="assets/press/horizontal_2.webp" alt="J Mauri frente al público" loading="lazy"/></button>
-      <button class="gallery-item" data-full="assets/press/normal_4.webp"><img src="assets/press/normal_4.webp" alt="J Mauri, retrato" loading="lazy"/></button>
-      <button class="gallery-item span-tall" data-full="assets/press/vertical_3.webp"><img src="assets/press/vertical_3.webp" alt="J Mauri, retrato vertical" loading="lazy"/></button>
-      <button class="gallery-item span-wide" data-full="assets/press/horizontal_3.webp"><img src="assets/press/horizontal_3.webp" alt="J Mauri en vivo" loading="lazy"/></button>
-      <button class="gallery-item span-tall" data-full="assets/press/vertical_4.webp"><img src="assets/press/vertical_4.webp" alt="J Mauri, retrato vertical" loading="lazy"/></button>
-      <button class="gallery-item span-wide" data-full="assets/press/horizontal_4.webp"><img src="assets/press/horizontal_4.webp" alt="J Mauri en vivo" loading="lazy"/></button>
+      <button class="gallery-item span-tall" data-full="assets/press/vertical_1.webp"><img src="assets/press/vertical_1.webp" alt="J Mauri, retrato vertical" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item" data-full="assets/press/normal_1.webp"><img src="assets/press/normal_1.webp" alt="J Mauri, retrato de estudio" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item" data-full="assets/press/normal_2.webp"><img src="assets/press/normal_2.webp" alt="J Mauri, retrato de estudio" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item span-wide" data-full="assets/press/horizontal_1.webp"><img src="assets/press/horizontal_1.webp" alt="J Mauri en set, festival" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item span-tall" data-full="assets/press/vertical_2.webp"><img src="assets/press/vertical_2.webp" alt="J Mauri en cabina" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item" data-full="assets/press/normal_3.webp"><img src="assets/press/normal_3.webp" alt="J Mauri, retrato" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item span-wide" data-full="assets/press/horizontal_2.webp"><img src="assets/press/horizontal_2.webp" alt="J Mauri frente al público" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item" data-full="assets/press/normal_4.webp"><img src="assets/press/normal_4.webp" alt="J Mauri, retrato" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item span-tall" data-full="assets/press/vertical_3.webp"><img src="assets/press/vertical_3.webp" alt="J Mauri, retrato vertical" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item span-wide" data-full="assets/press/horizontal_3.webp"><img src="assets/press/horizontal_3.webp" alt="J Mauri en vivo" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item span-tall" data-full="assets/press/vertical_4.webp"><img src="assets/press/vertical_4.webp" alt="J Mauri, retrato vertical" loading="lazy" decoding="async"/></button>
+      <button class="gallery-item span-wide" data-full="assets/press/horizontal_4.webp"><img src="assets/press/horizontal_4.webp" alt="J Mauri en vivo" loading="lazy" decoding="async"/></button>
     </div>
   </div>
 
@@ -128,7 +199,7 @@
   </div>
 </section>
 
-<div class="pause-divider" aria-hidden="true"><span class="pause-line"></span></div>
+<div class="wave" id="wave" aria-hidden="true"></div>
 
 <!-- ============ SESIONES ============ -->
 <section id="sesiones" class="section section-wide">
@@ -136,24 +207,25 @@
 
   <div class="video-showcase">
     <div class="video-main">
-      <iframe 
-        id="videoFrame" 
-        src="https://www.youtube.com/embed/wimV3hKELhw?si=hSHqn46nZeAG9ofl"
-        title="Video destacado" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      <iframe
+        id="videoFrame"
+        src="https://www.youtube-nocookie.com/embed/wimV3hKELhw?rel=0&modestbranding=1"
+        title="Video destacado"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
         loading="lazy"
         width="100%"
         height="100%">
       </iframe>
     </div>
+    <p class="now-playing"><span class="np-dot"></span><em>Now playing</em><b id="nowTitle">Mauryseo Vol. 3</b></p>
     <div class="video-selector" id="videoSelector" role="menu" aria-label="Selector de videos"></div>
   </div>
 </section>
 
 <!-- ============ BOOKING ============ -->
 <section id="contacto" class="section section-contact">
-  <h2 class="section-title">Booking & Contacto</h2>
+  <h2 class="section-title">Booking &amp; Contacto</h2>
   <div class="contact-ctas">
     <a href="https://wa.me/525567777542?text=Hola%20J%20Mauri%2C%20quiero%20hablar%20de%20un%20booking" target="_blank" rel="noopener" id="wa">
       <svg viewBox="0 0 24 24" fill="currentColor" width="19" height="19"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.3.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.2-.9.9-.9 2.1 0 1.3.9 2.5 1.1 2.7.1.2 1.8 2.8 4.5 3.8.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
@@ -171,7 +243,7 @@
 
   <div class="rider-card">
     <div class="rider-photo">
-      <img src="assets/press/ridertecnico.webp" alt="Cabina Pioneer DJ"/>
+      <img src="assets/press/ridertecnico.webp" alt="Cabina Pioneer DJ" loading="lazy" decoding="async"/>
     </div>
 
     <div class="rider-options">
