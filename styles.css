@@ -1,15 +1,17 @@
 /* ==========================================================================
-   J MAURI — PRESS KIT 2026 — v17
+   J MAURI — PRESS KIT 2026 — v18
    Móvil: centrado, amplio y limpio.
    Desktop: editorial, horizontal y profesional.
+   Acento: naranja-rojo #ff5a1f.
+   Iconos: metálicos, alineados con el logo.
    ========================================================================== */
 
 :root{
   --bg-deep:#050507;
   --bg-panel:rgba(255,255,255,.03);
   --line:rgba(255,255,255,.1);
-  --accent:#ff2d1f;
-  --accent-soft:rgba(255,45,31,.35);
+  --accent:#ff5a1f;
+  --accent-soft:rgba(255,90,31,.35);
   --white:#f4f6fb;
   --steel:#8d96a9;
   --chrome:linear-gradient(180deg,#fff 0%,#dfe5f2 36%,#7b869b 60%,#eef2fb 78%,#a9b3c6 100%);
@@ -265,11 +267,11 @@ body.past-hero #minibar{transform:translateY(0);visibility:visible;transition:tr
 .hero-socials a{
   flex:none;
   width:56px;height:56px;
-  border:1px solid rgba(255,45,31,.45);
+  border:1px solid rgba(255,255,255,.22);
   background:#0a0a0d;
   clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
   display:flex;align-items:center;justify-content:center;
-  color:var(--accent);
+  color:#dfe5f2;
   transition:color .25s var(--ease),border-color .25s var(--ease),background .25s var(--ease),transform .25s var(--ease);
 }
 .hero-socials svg{
@@ -278,8 +280,8 @@ body.past-hero #minibar{transform:translateY(0);visibility:visible;transition:tr
 }
 .hero-socials a:hover{
   color:#08090d;
-  border-color:var(--accent);
-  background:var(--accent);
+  border-color:#dfe5f2;
+  background:var(--chrome-btn);
   transform:translateY(-3px);
 }
 .hero-socials a:active{opacity:.8}
