@@ -1,5 +1,5 @@
 /* ==========================================================================
-   J MAURI — PRESS KIT 2026 — v18
+   J MAURI — PRESS KIT 2026 — v19
    Móvil: centrado, amplio y limpio.
    Desktop: editorial, horizontal y profesional.
    Acento: naranja-rojo #ff5a1f.
@@ -393,8 +393,13 @@ body.is-ready .hero-brand{opacity:1;transform:none;transition:opacity .9s var(--
 
 /* ---------- Bio ---------- */
 .bio-kicker{
-  display:flex;align-items:center;justify-content:flex-start;gap:10px;margin:0 0 18px;
-  font-size:11.5px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--white);
+  display:flex;align-items:center;gap:10px;margin:0 0 18px;
+  font-family:var(--font-display);
+  font-weight:400;
+  font-size:22px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--white);
 }
 .bio-sub{
   font-family:var(--font-display);font-weight:400;font-size:22px;letter-spacing:.04em;text-transform:uppercase;
